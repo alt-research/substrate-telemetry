@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-use common::node_message::Payload;
-use common::node_types::BlockHash;
-use common::node_types::{Block, Timestamp};
+use common::node_message::{ChainType, Payload};
+use common::node_types::{AppPeriod, Block, Timestamp};
+use common::node_types::{BlockHash, VerifierBlockInfos};
 use common::{id_type, time, DenseMap, MostSeen, NumStats};
 use once_cell::sync::Lazy;
 use std::collections::HashSet;
@@ -66,6 +66,15 @@ pub struct Chain {
     stats: ChainStats,
     /// Timestamp of when the stats were last regenerated.
     stats_last_regenerated: Instant,
+
+    /// The submitted block datas
+    pub submitted_block: VerifierBlockInfos,
+    /// The challenged block datas
+    pub challenged_block: VerifierBlockInfos,
+    /// The submission period
+    pub submission_period: AppPeriod,
+    /// The challenge period
+    pub challenge_period: AppPeriod,
 }
 
 pub enum AddNodeResult {
@@ -118,6 +127,10 @@ impl Chain {
             stats_collator: Default::default(),
             stats: Default::default(),
             stats_last_regenerated: Instant::now(),
+            submitted_block: Default::default(),
+            challenged_block: Default::default(),
+            submission_period: 0,
+            challenge_period: 0,
         }
     }
 
@@ -183,15 +196,38 @@ impl Chain {
         if let Some(node) = self.nodes.get_mut(nid) {
             match payload {
                 Payload::SystemInterval(ref interval) => {
+                    let chain_type = payload.chain_type();
+
+                    match chain_type {
+                        Some(ChainType::Layer1) => {
+                            if let Some(stats) = node.update_stats(interval) {
+                                feed.push(feed_message::Layer1NodeStatsUpdate(nid.into(), stats));
+                            }
+                            if let Some(io) = node.update_io(interval) {
+                                feed.push(feed_message::Layer1NodeIOUpdate(nid.into(), io));
+                            }
+                        }
+                        Some(ChainType::Layer2(_)) => {
+                            if let Some(stats) = node.update_stats(interval) {
+                                feed.push(feed_message::Layer2NodeStatsUpdate(nid.into(), stats));
+                            }
+                            if let Some(io) = node.update_io(interval) {
+                                feed.push(feed_message::Layer2NodeIOUpdate(nid.into(), io));
+                            }
+                        }
+                        None => {
+                            if let Some(stats) = node.update_stats(interval) {
+                                feed.push(feed_message::NodeStatsUpdate(nid.into(), stats));
+                            }
+                            if let Some(io) = node.update_io(interval) {
+                                feed.push(feed_message::NodeIOUpdate(nid.into(), io));
+                            }
+                        }
+                    }
+
                     // Send a feed message if any of the relevant node details change:
                     if node.update_hardware(interval) {
                         feed.push(feed_message::Hardware(nid.into(), node.hardware()));
-                    }
-                    if let Some(stats) = node.update_stats(interval) {
-                        feed.push(feed_message::NodeStatsUpdate(nid.into(), stats));
-                    }
-                    if let Some(io) = node.update_io(interval) {
-                        feed.push(feed_message::NodeIOUpdate(nid.into(), io));
                     }
                 }
                 Payload::AfgAuthoritySet(authority) => {
@@ -215,23 +251,133 @@ impl Chain {
                     self.stats_collator
                         .update_hwbench(node.hwbench(), CounterValue::Increment);
                 }
+                Payload::VerifierDetailsStats(ref details) => {
+                    if let (
+                        Some(submitted_digest),
+                        Some(submitted_block_number),
+                        Some(submitted_block_hash),
+                    ) = (
+                        details.submitted_digest,
+                        details.submitted_block_number,
+                        details.submitted_block_hash,
+                    ) {
+                        let info = VerifierBlockInfos {
+                            digest: submitted_digest,
+                            block_number: submitted_block_number,
+                            block_hash: submitted_block_hash,
+                        };
+
+                        if self.submitted_block.block_number < info.block_number {
+                            self.submitted_block = info.clone();
+                        }
+
+                        if node.update_verifier_submitted(info) {
+                            feed.push(feed_message::VerifierNodeSubmittedBlockStats(
+                                nid.into(),
+                                node.verifier_submitted(),
+                            ));
+                        }
+                    }
+
+                    if let (
+                        Some(challenged_digest),
+                        Some(challenged_block_number),
+                        Some(challenged_block_hash),
+                    ) = (
+                        details.challenged_digest,
+                        details.challenged_block_number,
+                        details.challenged_block_hash,
+                    ) {
+                        let info = VerifierBlockInfos {
+                            digest: challenged_digest,
+                            block_number: challenged_block_number,
+                            block_hash: challenged_block_hash,
+                        };
+
+                        if self.challenged_block.block_number < info.block_number {
+                            self.challenged_block = info.clone();
+                        }
+
+                        if node.update_verifier_challenged(info) {
+                            feed.push(feed_message::VerifierNodeChallengedBlockStats(
+                                nid.into(),
+                                node.verifier_challenged(),
+                            ));
+                        }
+                    }
+                }
+                Payload::VerifierPeriodStats(ref period) => {
+                    if let Some(submission) = period.submission {
+                        if self.submission_period < submission {
+                            self.submission_period = submission;
+                        }
+
+                        if node.update_verifier_submission_period(submission) {
+                            feed.push(feed_message::VerifierNodeSubmissionPeriodStats(
+                                nid.into(),
+                                node.verifier_submission_period(),
+                            ));
+                        }
+                    }
+
+                    if let Some(challenge) = period.challenge {
+                        if self.challenge_period < challenge {
+                            self.challenge_period = challenge;
+                        }
+
+                        if node.update_verifier_challenge_period(challenge) {
+                            feed.push(feed_message::VerifierNodeChallengePeriodStats(
+                                nid.into(),
+                                node.verifier_challenge_period(),
+                            ));
+                        }
+                    }
+                }
                 _ => {}
             }
 
             if let Some(block) = payload.finalized_block() {
                 if let Some(finalized) = node.update_finalized(block) {
-                    feed.push(feed_message::FinalizedBlock(
-                        nid.into(),
-                        finalized.height,
-                        finalized.hash,
-                    ));
+                    match payload.chain_type() {
+                        Some(ChainType::Layer1) => {
+                            feed.push(feed_message::Layer1FinalizedBlock(
+                                nid.into(),
+                                finalized.height,
+                                finalized.hash,
+                            ));
+                        }
+                        Some(ChainType::Layer2(_)) => {
+                            feed.push(feed_message::Layer2FinalizedBlock(
+                                nid.into(),
+                                finalized.height,
+                                finalized.hash,
+                            ));
+                        }
+                        None => {
+                            feed.push(feed_message::FinalizedBlock(
+                                nid.into(),
+                                finalized.height,
+                                finalized.hash,
+                            ));
+                        }
+                    }
 
                     if finalized.height > self.finalized.height {
                         self.finalized = *finalized;
-                        feed.push(feed_message::BestFinalized(
-                            finalized.height,
-                            finalized.hash,
-                        ));
+                        match payload.chain_type() {
+                            Some(ChainType::Layer1) => {
+                                // TODO useless
+                            }
+                            Some(ChainType::Layer2(_)) => {
+                                // TODO useless
+                            }
+                            None => {
+                                feed.push(feed_message::BestFinalized(
+                                    finalized.height,
+                                    finalized.hash,
+                                ));
+                            }
+                        }
                     }
                 }
             }
@@ -302,6 +448,11 @@ impl Chain {
         let mut finalized = Block::zero();
         let mut timestamp = None;
 
+        let mut submitted_block = VerifierBlockInfos::default();
+        let mut challenged_block = VerifierBlockInfos::default();
+        let mut submission_period = 0;
+        let mut challenge_period = 0;
+
         for (nid, node) in self.nodes.iter_mut() {
             if !node.update_stale(threshold) {
                 if node.best().height > best.height {
@@ -312,11 +463,28 @@ impl Chain {
                 if node.finalized().height > finalized.height {
                     finalized = *node.finalized();
                 }
+
+                if node.verifier_submitted().block_number > submitted_block.block_number {
+                    submitted_block = node.verifier_submitted().clone();
+                }
+
+                if node.verifier_challenged().block_number > challenged_block.block_number {
+                    challenged_block = node.verifier_challenged().clone();
+                }
+
+                if node.verifier_submission_period() > submission_period {
+                    submission_period = node.verifier_submission_period();
+                }
+
+                if node.verifier_challenge_period() > challenge_period {
+                    challenge_period = node.verifier_challenge_period();
+                }
             } else {
                 feed.push(feed_message::StaleNode(nid.into()));
             }
         }
 
+        // TODO: maybe this is a bug.
         if self.best.height != 0 || self.finalized.height != 0 {
             self.best = best;
             self.finalized = finalized;
@@ -331,6 +499,31 @@ impl Chain {
             feed.push(feed_message::BestFinalized(
                 finalized.height,
                 finalized.hash,
+            ));
+        }
+
+        if submitted_block.block_number != 0 {
+            self.submitted_block = submitted_block;
+            feed.push(feed_message::SubmittedBlock(
+                self.submitted_block.block_number,
+                self.submitted_block.block_hash,
+            ));
+        }
+
+        if challenged_block.block_number != 0 {
+            self.challenged_block = challenged_block;
+            feed.push(feed_message::ChallengedBlock(
+                self.challenged_block.block_number,
+                self.challenged_block.block_hash,
+            ));
+        }
+
+        if submission_period != 0 || challenge_period != 0 {
+            self.submission_period = submission_period;
+            self.challenge_period = challenge_period;
+            feed.push(feed_message::Period(
+                self.submission_period,
+                self.challenge_period,
             ));
         }
     }

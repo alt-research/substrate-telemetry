@@ -20,6 +20,10 @@
 //! compatibility with the input data when we make changes to our internal data
 //! structures (for example, to support bincode better).
 use super::hash::Hash;
+use super::{
+    ChainType, VerifierDetailsStats, VerifierNodeDetails, VerifierPeriodStats,
+    VerifierProcessFinalityBlock,
+};
 use common::node_message as internal;
 use common::node_types;
 use serde::Deserialize;
@@ -46,6 +50,7 @@ pub enum NodeMessage {
     V2 {
         id: NodeMessageId,
         payload: Payload,
+        ts: Option<String>,
     },
 }
 
@@ -55,7 +60,7 @@ impl From<NodeMessage> for internal::NodeMessage {
             NodeMessage::V1 { payload } => internal::NodeMessage::V1 {
                 payload: payload.into(),
             },
-            NodeMessage::V2 { id, payload } => internal::NodeMessage::V2 {
+            NodeMessage::V2 { id, payload, .. } => internal::NodeMessage::V2 {
                 id,
                 payload: payload.into(),
             },
@@ -78,6 +83,14 @@ pub enum Payload {
     AfgAuthoritySet(AfgAuthoritySet),
     #[serde(rename = "sysinfo.hwbench")]
     HwBench(NodeHwBench),
+    #[serde(rename = "verifier.node_details")]
+    VerifierNodeDetails(VerifierNodeDetails),
+    #[serde(rename = "verifier.process_finality_block")]
+    VerifierProcessFinalityBlock(VerifierProcessFinalityBlock),
+    #[serde(rename = "verifier.details")]
+    VerifierDetailsStats(VerifierDetailsStats),
+    #[serde(rename = "verifier.period")]
+    VerifierPeriodStats(VerifierPeriodStats),
 }
 
 impl From<Payload> for internal::Payload {
@@ -89,6 +102,12 @@ impl From<Payload> for internal::Payload {
             Payload::NotifyFinalized(m) => internal::Payload::NotifyFinalized(m.into()),
             Payload::AfgAuthoritySet(m) => internal::Payload::AfgAuthoritySet(m.into()),
             Payload::HwBench(m) => internal::Payload::HwBench(m.into()),
+            Payload::VerifierNodeDetails(m) => internal::Payload::VerifierNodeDetails(m.into()),
+            Payload::VerifierProcessFinalityBlock(m) => {
+                internal::Payload::VerifierProcessFinalityBlock(m.into())
+            }
+            Payload::VerifierDetailsStats(m) => internal::Payload::VerifierDetailsStats(m.into()),
+            Payload::VerifierPeriodStats(m) => internal::Payload::VerifierPeriodStats(m.into()),
         }
     }
 }
@@ -111,6 +130,9 @@ impl From<SystemConnected> for internal::SystemConnected {
 
 #[derive(Deserialize, Debug)]
 pub struct SystemInterval {
+    /// The chain type
+    pub chain_type: Option<ChainType>,
+
     pub peers: Option<u64>,
     pub txcount: Option<u64>,
     pub bandwidth_upload: Option<f64>,
@@ -125,6 +147,7 @@ pub struct SystemInterval {
 impl From<SystemInterval> for internal::SystemInterval {
     fn from(msg: SystemInterval) -> Self {
         internal::SystemInterval {
+            chain_type: msg.chain_type,
             peers: msg.peers,
             txcount: msg.txcount,
             bandwidth_upload: msg.bandwidth_upload,
@@ -139,6 +162,9 @@ impl From<SystemInterval> for internal::SystemInterval {
 
 #[derive(Deserialize, Debug)]
 pub struct Finalized {
+    /// The chain type
+    pub chain_type: Option<ChainType>,
+
     #[serde(rename = "best")]
     pub hash: Hash,
     pub height: Box<str>,
@@ -147,6 +173,7 @@ pub struct Finalized {
 impl From<Finalized> for internal::Finalized {
     fn from(msg: Finalized) -> Self {
         internal::Finalized {
+            chain_type: msg.chain_type,
             hash: msg.hash.into(),
             height: msg.height,
         }
@@ -161,6 +188,7 @@ pub struct AfgAuthoritySet {
 impl From<AfgAuthoritySet> for internal::AfgAuthoritySet {
     fn from(msg: AfgAuthoritySet) -> Self {
         internal::AfgAuthoritySet {
+            chain_type: None,
             authority_id: msg.authority_id,
         }
     }
@@ -168,6 +196,9 @@ impl From<AfgAuthoritySet> for internal::AfgAuthoritySet {
 
 #[derive(Deserialize, Debug, Clone, Copy)]
 pub struct Block {
+    /// The chain type
+    pub chain_type: Option<ChainType>,
+
     #[serde(rename = "best")]
     pub hash: Hash,
     pub height: BlockNumber,
