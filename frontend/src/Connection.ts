@@ -68,7 +68,7 @@ export class Connection {
       return `wss://${window.location.hostname}/feed/`;
     }
 
-    return 'ws://127.0.0.1:8000/feed';
+    return 'ws://localhost:8000/feed';
   }
 
   private static async socket(): Promise<WebSocket> {
@@ -163,8 +163,13 @@ export class Connection {
     }
 
     for (const message of messages) {
-      console.log(message);
       switch (message.action) {
+        case ACTIONS.Layer2ImportedBlock: {
+          // this.appUpdate
+          console.log('message', message);
+
+          break;
+        }
         case ACTIONS.FeedVersion: {
           if (message.payload !== VERSION) {
             return this.newVersion();

@@ -22,9 +22,9 @@ import { Row, THead } from './';
 import { Persistent, PersistentSet } from '../../persist';
 import { viewport } from '../../utils';
 
-const HEADER = 148;
-const TH_HEIGHT = 35;
-const TR_HEIGHT = 31;
+const HEADER = 262;
+const TH_HEIGHT = 36;
+const TR_HEIGHT = 44;
 const ROW_MARGIN = 5;
 
 import './List.css';

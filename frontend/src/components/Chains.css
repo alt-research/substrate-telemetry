@@ -17,12 +17,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
 .Chains {
-  background: #e6007a;
+  border-radius: 20px;
+  background: #373741;
   color: #000;
-  padding: 0 76px 0 16px;
+  padding-right: 16px;
   height: 40px;
-  min-width: 1350px;
   position: relative;
+  flex: 1;
 }
 
 .Chains-extra-subscribed-chain {
@@ -41,28 +42,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 }
 
 .Chains-chain {
-  top: 4px;
-  padding: 0 12px;
+  padding: 0 16px;
   color: #fff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-right: 4px;
-  height: 36px;
+  height: 40px;
   cursor: pointer;
-  font-size: 0.8em;
-  position: relative;
-  z-index: 0;
-  border-radius: 4px 4px 0 0;
 }
 
 .Chains-all-chains {
-  display: block;
-  padding: 0;
-  margin: 0;
-  position: absolute;
-  right: 48px;
-  top: 6px;
+
 }
 
 .Chains-fork-me {
@@ -84,20 +74,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 }
 
 .Chains-node-count {
-  padding: 0px;
-  display: inline-block;
-  border-radius: 20px;
-  background: #fff;
-  color: #e6007a;
-  font-size: 0.9em;
-  margin-left: 0.5em;
-  padding: 0.3em 0.5em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  border-radius: 10px;
+  font-weight: 500;
+  margin-left: 4px;
+  background: #6667ab;
+  padding: 0em 0.5em;
+  color: #fff;
 }
 
 /* Create a "tab background" that will rise up on hover/selection */
 .Chains-chain::before {
   content: '';
-  background-color: white;
   border-radius: 4px 4px 0 0;
   position: absolute;
   z-index: -1;
@@ -118,7 +109,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 }
 
 .Chains-chain.Chains-chain-selected {
-  color: #393838;
+  color: white;
+  font-weight: bold;
+  background-color: #6667AB;
+  border-radius: 20px;
   /*
   Instead of making the font bold, which changes the container width and
   causes some wobbling, apply a tiny text shadow to "bold" it without the
@@ -133,6 +127,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 }
 
 .Chains-chain.Chains-chain-selected .Chains-node-count {
-  background: #393838;
   color: #fff;
+  background: #000000;
 }

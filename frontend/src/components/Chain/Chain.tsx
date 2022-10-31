@@ -77,7 +77,6 @@ export class Chain extends React.Component<ChainProps, ChainState> {
           blockAverage={blockAverage}
           blockTimestamp={blockTimestamp}
           currentTab={currentTab}
-          setDisplay={this.setDisplay}
         />
         <div className="Chain-content-container">
           <div className="Chain-content">{this.renderContent()}</div>
@@ -116,8 +115,4 @@ export class Chain extends React.Component<ChainProps, ChainState> {
 
     throw new Error('invalid `display`: ${display}');
   }
-
-  private setDisplay = (display: ChainDisplay) => {
-    this.setState({ display });
-  };
 }

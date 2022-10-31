@@ -17,19 +17,33 @@
 import * as React from 'react';
 import { Types, Maybe } from '../../common';
 import { formatNumber, secondsWithPrecision } from '../../utils';
-import { Tab, ChainDisplay } from './';
+import { ChainDisplay } from './';
 import { Tile, Ago } from '../';
 
-import blockIcon from '../../icons/cube.svg';
-import finalizedIcon from '../../icons/cube-alt.svg';
-import blockTimeIcon from '../../icons/history.svg';
-import lastTimeIcon from '../../icons/watch.svg';
-import listIcon from '../../icons/list-alt-regular.svg';
-import worldIcon from '../../icons/location.svg';
-import settingsIcon from '../../icons/settings.svg';
-import statsIcon from '../../icons/graph.svg';
+import l2FinalIcon from '../../icons/l2-final.svg';
+import submittedDigestIcon from '../../icons/l1-submitted-digest.svg';
+import chanllengedDigestIcon from '../../icons/l1-challenged-digest.svg';
+import submissionAppPeriodIcon from '../../icons/l1-submission-appperiod.svg';
+import finishedChallengeAppPeriodIcon from '../../icons/l1-finished-challenge-appperiod.svg';
 
 import './Header.css';
+import styled from 'styled-components';
+
+const Labeled = styled('div')`
+  border-left: 2px solid #6667ab;
+  padding-left: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 14px;
+
+  span.title {
+    font-size: 13px;
+    font-weight: bold;
+    color: #a4a4b2;
+    margin-right: 4px;
+  }
+`;
 
 interface HeaderProps {
   best: Types.BlockNumber;
@@ -37,7 +51,6 @@ interface HeaderProps {
   blockTimestamp: Types.Timestamp;
   blockAverage: Maybe<Types.Milliseconds>;
   currentTab: ChainDisplay;
-  setDisplay: (display: ChainDisplay) => void;
 }
 
 export class Header extends React.Component<HeaderProps> {
@@ -53,58 +66,32 @@ export class Header extends React.Component<HeaderProps> {
 
   public render() {
     const { best, finalized, blockTimestamp, blockAverage } = this.props;
-    const { currentTab, setDisplay } = this.props;
 
     return (
       <div className="Header">
-        <Tile icon={blockIcon} title="Best Block">
+        <Tile icon={l2FinalIcon} title="L2 finalize block & hash" suffix={<p style={{
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+          fontSize: '14px'
+        }}>0xd418a3d34f3f35bd418a3d34f3f35b</p>}>
           #{formatNumber(best)}
         </Tile>
-        <Tile icon={finalizedIcon} title="Finalized Block">
+        <div className="divider" />
+        <Tile icon={submittedDigestIcon} title="L1 submitted digest" suffix={<Labeled><span className="title">Block hash</span>0xd418a3d34f3f35bd418a3d34f3f35b</Labeled>}>
           #{formatNumber(finalized)}
         </Tile>
-        <Tile icon={blockTimeIcon} title="Average Time">
+        <Tile icon={chanllengedDigestIcon} title="L1 challenged digest" suffix={<Labeled><span className="title">Block hash</span>0xd418a3d34f3f35bd418a3d34f3f35b</Labeled>}>
           {blockAverage == null
             ? '-'
             : secondsWithPrecision(blockAverage / 1000)}
         </Tile>
-        <Tile icon={lastTimeIcon} title="Last Block">
+        <Tile icon={submissionAppPeriodIcon} title="L1 submission AppPeriod">
           <Ago when={blockTimestamp} />
         </Tile>
-        <div className="Header-tabs">
-          <Tab
-            icon={listIcon}
-            label="List"
-            display="list"
-            tab=""
-            current={currentTab}
-            setDisplay={setDisplay}
-          />
-          <Tab
-            icon={worldIcon}
-            label="Map"
-            display="map"
-            tab="map"
-            current={currentTab}
-            setDisplay={setDisplay}
-          />
-          <Tab
-            icon={statsIcon}
-            label="Stats"
-            display="stats"
-            tab="stats"
-            current={currentTab}
-            setDisplay={setDisplay}
-          />
-          <Tab
-            icon={settingsIcon}
-            label="Settings"
-            display="settings"
-            tab="settings"
-            current={currentTab}
-            setDisplay={setDisplay}
-          />
-        </div>
+        <Tile icon={finishedChallengeAppPeriodIcon} title="L1 last finished challenge AppPeriod">
+          <Ago when={blockTimestamp} />
+        </Tile>
       </div>
     );
   }

@@ -25,12 +25,14 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-measure": "^2.5.2",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "styled-components": "^5.3.6"
   },
   "devDependencies": {
     "@types/node": "^16.11.58",
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
+    "@types/styled-components": "^5.1.26",
     "@types/tape": "^4.13.0",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",

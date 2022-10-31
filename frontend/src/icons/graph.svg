@@ -1,1 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M16 14v1H0V0h1v14h15zM5 13H3V8h2v5zm4 0H7V3h2v10zm4 0h-2V6h2v7z"/></svg>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Telemetry" transform="translate(-1834.000000, -82.000000)">
+            <g id="编组-8" transform="translate(1752.000000, 72.000000)">
+                <g id="chart--bar-target" transform="translate(82.000000, 10.000000)">
+                    <rect id="矩形" fill="#BDBDCE" fill-rule="nonzero" x="17.5" y="10.625" width="1.25" height="5"></rect>
+                    <rect id="矩形" fill="#BDBDCE" fill-rule="nonzero" x="12.5" y="3.125" width="1.25" height="5"></rect>
+                    <path d="M2.5,1.25 L1.25,1.25 L1.25,17.5 C1.25,18.1903559 1.80964406,18.75 2.5,18.75 L18.75,18.75 L18.75,17.5 L2.5,17.5 L2.5,15.625 L16.25,15.625 L16.25,10.625 L2.5,10.625 L2.5,8.125 L11.25,8.125 L11.25,3.125 L2.5,3.125 L2.5,1.25 Z M15,11.875 L15,14.375 L2.5,14.375 L2.5,11.875 L15,11.875 Z M10,4.375 L10,6.875 L2.5,6.875 L2.5,4.375 L10,4.375 Z" id="形状" fill="#BDBDCE" fill-rule="nonzero"></path>
+                    <rect id="_Transparent_Rectangle_" x="0" y="0" width="20" height="20"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

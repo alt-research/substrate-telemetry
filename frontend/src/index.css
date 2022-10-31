@@ -15,14 +15,76 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
+@font-face {
+  font-family: 'Kanit';
+  font-style: normal;
+  font-weight: 300;
+  src: url('./assets/fonts/Kanit-Light.ttf');
+}
+@font-face {
+  font-family: 'Kanit';
+  font-style: italic;
+  font-weight: 300;
+  src: url('./assets/fonts/Kanit-LightItalic.ttf');
+}
+@font-face {
+  font-family: 'Kanit';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./assets/fonts/Kanit-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Kanit';
+  font-style: normal;
+  font-weight: 500;
+  src: url('./assets/fonts/Kanit-Medium.ttf');
+}
+@font-face {
+  font-family: 'Kanit';
+  font-style: italic;
+  font-weight: 500;
+  src: url('./assets/fonts/Kanit-MediumItalic.ttf');
+}
+@font-face {
+  font-family: 'Kanit';
+  font-style: normal;
+  font-weight: 600;
+  src: url('./assets/fonts/Kanit-SemiBold.ttf');
+}
+@font-face {
+  font-family: 'Kanit';
+  font-style: italic;
+  font-weight: 600;
+  src: url('./assets/fonts/Kanit-SemiBoldItalic.ttf');
+}
+@font-face {
+  font-family: 'Kanit';
+  font-style: normal;
+  font-weight: 700;
+  src: url('./assets/fonts/Kanit-Bold.ttf');
+}
+@font-face {
+  font-family: 'Kanit';
+  font-style: italic;
+  font-weight: 700;
+  src: url('./assets/fonts/Kanit-BoldItalic.ttf');
+}
 
 * {
   /* Use "standard"/common sense heights/widths (ie they include padding+border) */
   box-sizing: border-box;
+  font-family: Kanit, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 body {
+  background: #17171c;
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: Kanit, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+p {
+  margin: 0;
+  padding: 0;
 }
