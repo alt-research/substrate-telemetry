@@ -66,16 +66,20 @@ export class Chain extends React.Component<ChainProps, ChainState> {
 
   public render() {
     const { appState } = this.props;
-    const { best, finalized, blockTimestamp, blockAverage } = appState;
+    const { l2FinalizedBlockHash, l2FinalizedBlockNumber, submittedDigestHash, submittedBlockHash, submittedPeriod, challengedDigestHash, challengedBlockHash, challengedPeriod } = appState;
     const { display: currentTab } = this.state;
 
     return (
       <div className="Chain">
         <Header
-          best={best}
-          finalized={finalized}
-          blockAverage={blockAverage}
-          blockTimestamp={blockTimestamp}
+          l2FinalizedBlockHash={l2FinalizedBlockHash}
+          l2FinalizedBlockNumber={l2FinalizedBlockNumber}
+          submittedBlockHash={submittedBlockHash}
+          submittedDigestHash={submittedDigestHash}
+          submittedPeriod={submittedPeriod}
+          challengedBlockHash={challengedBlockHash}
+          challengedDigestHash={challengedDigestHash}
+          challengedPeriod={challengedPeriod}
           currentTab={currentTab}
         />
         <div className="Chain-content-container">

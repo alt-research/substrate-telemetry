@@ -37,11 +37,10 @@ const Header: React.FC<{
   );
 };
 
-
 export default styled(Header)`
   height: 112px;
   padding: 0px 24px;
-  background: linear-gradient(181deg,#000000 0%, #414169 100%);
+  background: linear-gradient(0deg,#000000 0%, #2f2e56 100%);
 
   > .logo-container {
     height: 72px;

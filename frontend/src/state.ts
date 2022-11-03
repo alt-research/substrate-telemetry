@@ -259,8 +259,17 @@ export interface StateSettings {
 
 export interface State {
   status: 'online' | 'offline' | 'upgrade-requested';
-  best: Types.BlockNumber;
-  finalized: Types.BlockNumber;
+  l2FinalizedBlockNumber: Types.BlockNumber,
+  l2FinalizedBlockHash: Types.BlockHash,
+  submittedBlockNumber: Types.BlockNumber;
+  submittedBlockHash: Types.BlockHash;
+  submittedDigestHash: Types.DigestHash;
+  challengedBlockNumber: Types.BlockNumber;
+  challengedBlockHash: Types.BlockHash;
+  challengedDigestHash: Types.DigestHash;
+  submittedPeriod: Types.AppPeriod;
+  challengedPeriod: Types.AppPeriod;
+  layer2ImportedBlock: Types.BlockDetails;
   tab: string;
   blockTimestamp: Types.Timestamp;
   blockAverage: Maybe<Types.Milliseconds>;

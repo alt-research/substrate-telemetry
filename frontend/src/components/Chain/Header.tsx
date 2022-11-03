@@ -46,26 +46,43 @@ const Labeled = styled('div')`
 `;
 
 interface HeaderProps {
-  best: Types.BlockNumber;
-  finalized: Types.BlockNumber;
-  blockTimestamp: Types.Timestamp;
-  blockAverage: Maybe<Types.Milliseconds>;
+  l2FinalizedBlockNumber: Types.BlockNumber,
+  l2FinalizedBlockHash: Types.BlockHash,
+  submittedDigestHash: Types.DigestHash,
+  submittedBlockHash: Types.BlockHash,
+  challengedBlockHash: Types.BlockHash,
+  challengedDigestHash: Types.DigestHash,
+  submittedPeriod: Types.AppPeriod,
+  challengedPeriod: Types.AppPeriod,
   currentTab: ChainDisplay;
 }
 
 export class Header extends React.Component<HeaderProps> {
   public shouldComponentUpdate(nextProps: HeaderProps) {
     return (
-      this.props.best !== nextProps.best ||
-      this.props.finalized !== nextProps.finalized ||
-      this.props.blockTimestamp !== nextProps.blockTimestamp ||
-      this.props.blockAverage !== nextProps.blockAverage ||
+      this.props.l2FinalizedBlockNumber !== nextProps.l2FinalizedBlockNumber ||
+      this.props.l2FinalizedBlockHash !== nextProps.l2FinalizedBlockHash ||
+      this.props.submittedDigestHash !== nextProps.submittedDigestHash ||
+      this.props.submittedBlockHash !== nextProps.submittedBlockHash ||
+      this.props.submittedPeriod !== nextProps.submittedPeriod ||
+      this.props.challengedDigestHash !== nextProps.challengedDigestHash ||
+      this.props.challengedBlockHash !== nextProps.challengedBlockHash ||
+      this.props.challengedPeriod !== nextProps.challengedPeriod ||
       this.props.currentTab !== nextProps.currentTab
     );
   }
 
   public render() {
-    const { best, finalized, blockTimestamp, blockAverage } = this.props;
+    const {
+      l2FinalizedBlockNumber,
+      l2FinalizedBlockHash,
+      submittedBlockHash,
+      submittedDigestHash,
+      challengedDigestHash,
+      challengedBlockHash,
+      submittedPeriod,
+      challengedPeriod,
+    } = this.props;
 
     return (
       <div className="Header">
@@ -74,23 +91,21 @@ export class Header extends React.Component<HeaderProps> {
           whiteSpace: 'nowrap',
           textOverflow: 'ellipsis',
           fontSize: '14px'
-        }}>0xd418a3d34f3f35bd418a3d34f3f35b</p>}>
-          #{formatNumber(best)}
+        }}>{l2FinalizedBlockHash}</p>}>
+          #{formatNumber(l2FinalizedBlockNumber)}
         </Tile>
         <div className="divider" />
-        <Tile icon={submittedDigestIcon} title="L1 submitted digest" suffix={<Labeled><span className="title">Block hash</span>0xd418a3d34f3f35bd418a3d34f3f35b</Labeled>}>
-          #{formatNumber(finalized)}
+        <Tile icon={submittedDigestIcon} title="L1 submitted digest" suffix={<Labeled><span className="title">Block hash</span>{submittedBlockHash}</Labeled>}>
+          {submittedDigestHash || '0x'}
         </Tile>
-        <Tile icon={chanllengedDigestIcon} title="L1 challenged digest" suffix={<Labeled><span className="title">Block hash</span>0xd418a3d34f3f35bd418a3d34f3f35b</Labeled>}>
-          {blockAverage == null
-            ? '-'
-            : secondsWithPrecision(blockAverage / 1000)}
+        <Tile icon={chanllengedDigestIcon} title="L1 challenged digest" suffix={<Labeled><span className="title">Block hash</span>{challengedBlockHash}</Labeled>}>
+          {challengedDigestHash || '0x'}
         </Tile>
         <Tile icon={submissionAppPeriodIcon} title="L1 submission AppPeriod">
-          <Ago when={blockTimestamp} />
+          {formatNumber(submittedPeriod)}
         </Tile>
         <Tile icon={finishedChallengeAppPeriodIcon} title="L1 last finished challenge AppPeriod">
-          <Ago when={blockTimestamp} />
+          {formatNumber(challengedPeriod)}
         </Tile>
       </div>
     );

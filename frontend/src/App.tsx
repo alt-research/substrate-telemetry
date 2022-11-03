@@ -50,6 +50,7 @@ export default class App extends React.Component {
     this.settings = new PersistentObject(
       'settings',
       {
+        name: true,
         validator: true,
         location: true,
         implementation: true,
@@ -100,8 +101,17 @@ export default class App extends React.Component {
 
     this.appUpdate = bindState(this, {
       status: 'offline',
-      best: 0 as Types.BlockNumber,
-      finalized: 0 as Types.BlockNumber,
+      l2FinalizedBlockNumber: 0 as Types.BlockNumber,
+      l2FinalizedBlockHash: '' as Types.BlockHash,
+      submittedBlockNumber: 0 as Types.BlockNumber,
+      submittedBlockHash: '' as Types.BlockHash,
+      submittedDigestHash: '' as Types.DigestHash,
+      challengedBlockNumber: 0 as Types.BlockNumber,
+      challengedBlockHash: '' as Types.BlockHash,
+      challengedDigestHash: '' as Types.DigestHash,
+      submittedPeriod: 0 as Types.AppPeriod,
+      challengedPeriod: 0 as Types.AppPeriod,
+      layer2ImportedBlock: [] as unknown as Types.BlockDetails,
       blockTimestamp: 0 as Types.Timestamp,
       blockAverage: null,
       timeDiff: 0 as Types.Milliseconds,
