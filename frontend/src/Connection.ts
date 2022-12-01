@@ -164,7 +164,6 @@ export class Connection {
     }
 
     for (const message of messages) {
-
       switch (message.action) {
         case ACTIONS.FeedVersion: {
           if (message.payload !== VERSION) {
