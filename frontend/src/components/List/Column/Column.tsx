@@ -21,16 +21,14 @@ import './Column.css';
 
 import {
   NameColumn,
-  ValidatorColumn,
+  VerifiedBlockHashColumn,
   LocationColumn,
   ImplementationColumn,
-  NetworkIdColumn,
   PeersColumn,
-  TxsColumn,
   UploadColumn,
   DownloadColumn,
-  StateCacheColumn,
-  BlockNumberColumn,
+  L1FinishedChallengeAppPeriod,
+  NodeUpTimeColumn,
   BlockHashColumn,
   FinalizedBlockColumn,
   FinalizedHashColumn,
@@ -38,27 +36,43 @@ import {
   BlockPropagationColumn,
   LastBlockColumn,
   UptimeColumn,
+  VerifiedBlockNumberColumn,
+  WaitSubmittedBlocksColumn,
+  L1FinalizedBlockNumberColumn,
+  L1FinalizedBlockHashColumn,
+  L2FinalizedBlockColumn,
+  L2FinalizedHashColumn,
 } from './';
+import { L1ChallengedColumn } from './L1ChallengedColumn';
+import { L1SubmittedColumn } from './L1SubmittedColumn';
+import { L1SubmissionAppPeriodColumn } from './L1SubmissionAppPeriodColumn';
 
 export type Column =
-  | typeof NameColumn
-  | typeof ValidatorColumn
+  typeof NameColumn
   | typeof LocationColumn
   | typeof ImplementationColumn
-  | typeof NetworkIdColumn
   | typeof PeersColumn
-  | typeof TxsColumn
   | typeof UploadColumn
   | typeof DownloadColumn
-  | typeof StateCacheColumn
-  | typeof BlockNumberColumn
+  | typeof L1FinishedChallengeAppPeriod
+  | typeof NodeUpTimeColumn
   | typeof BlockHashColumn
   | typeof FinalizedBlockColumn
   | typeof FinalizedHashColumn
   | typeof BlockTimeColumn
   | typeof BlockPropagationColumn
   | typeof LastBlockColumn
-  | typeof UptimeColumn;
+  | typeof UptimeColumn
+  | typeof VerifiedBlockNumberColumn
+  | typeof VerifiedBlockHashColumn
+  | typeof WaitSubmittedBlocksColumn
+  | typeof L1FinalizedBlockNumberColumn
+  | typeof L1FinalizedBlockHashColumn
+  | typeof L2FinalizedBlockColumn
+  | typeof L2FinalizedHashColumn
+  | typeof L1ChallengedColumn
+  | typeof L1SubmittedColumn
+  | typeof L1SubmissionAppPeriodColumn
 
 export interface ColumnProps {
   node: Node;

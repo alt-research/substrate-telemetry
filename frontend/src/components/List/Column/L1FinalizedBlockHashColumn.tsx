@@ -16,42 +16,35 @@
 
 import * as React from 'react';
 import { Maybe } from '../../../common';
-import { ColumnProps } from './';
+import { ColumnProps } from '.';
 import { Node } from '../../../state';
-import { Tooltip, PolkadotIcon, TooltipCopyCallback } from '../../';
-import icon from '../../../icons/shield.svg';
+import { Truncate, Tooltip, TooltipCopyCallback } from '../..';
+import icon from '../../../icons/l1blockhash.svg';
 
-export class ValidatorColumn extends React.Component<ColumnProps> {
-  public static readonly label = 'Validator';
+export class L1FinalizedBlockHashColumn extends React.Component<ColumnProps> {
+  public static readonly label = 'Layer1 Finalized Block Hash';
   public static readonly icon = icon;
-  public static readonly width = 16;
-  public static readonly setting = 'validator';
-  public static readonly sortBy = ({ validator }: Node) => validator || '';
+  public static readonly width = 154;
+  public static readonly setting = 'l1finalizedhash';
+  public static readonly sortBy = ({ finalizedHash }: Node) =>
+    finalizedHash || '';
 
   private data: Maybe<string>;
   private copy: Maybe<TooltipCopyCallback>;
 
   public shouldComponentUpdate(nextProps: ColumnProps) {
-    return this.data !== nextProps.node.validator;
+    return this.data !== nextProps.node.finalizedHash;
   }
 
   render() {
-    const { validator } = this.props.node;
+    const { finalizedHash } = this.props.node;
 
-    this.data = validator;
-
-    if (!validator) {
-      return <td className="Column">-</td>;
-    }
+    this.data = finalizedHash;
 
     return (
       <td className="Column" onClick={this.onClick}>
-        <Tooltip text={validator} copy={this.onCopy} />
-        <PolkadotIcon
-          className="Column-validator"
-          account={validator}
-          size={16}
-        />
+        <Tooltip text={finalizedHash} position="right" copy={this.onCopy} />
+        <Truncate text={finalizedHash} chars={16} />
       </td>
     );
   }

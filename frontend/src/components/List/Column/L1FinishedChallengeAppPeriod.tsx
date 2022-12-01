@@ -15,16 +15,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import * as React from 'react';
-import { ColumnProps, formatBytes, BANDWIDTH_SCALE } from './';
+import { ColumnProps, formatBytes, BANDWIDTH_SCALE } from '.';
 import { Node } from '../../../state';
-import { Sparkline } from '../../';
-import icon from '../../../icons/git-branch.svg';
+import { Sparkline } from '../..';
+import icon from '../../../icons/l1-finished-challeng-app-period.svg';
 
-export class StateCacheColumn extends React.Component<ColumnProps> {
-  public static readonly label = 'State Cache Size';
+export class L1FinishedChallengeAppPeriod extends React.Component<ColumnProps> {
+  public static readonly label = 'Layer1 last finished challenge AppPeriod';
   public static readonly icon = icon;
   public static readonly width = 40;
-  public static readonly setting = 'stateCacheSize';
+  public static readonly setting = 'l1finishedchallengeAppPeriod';
   public static readonly sortBy = ({ stateCacheSize }: Node) =>
     stateCacheSize.length < 3 ? 0 : stateCacheSize[stateCacheSize.length - 1];
 

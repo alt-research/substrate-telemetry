@@ -15,29 +15,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import * as React from 'react';
-import { ColumnProps } from './';
+import { ColumnProps } from '.';
 import { Node } from '../../../state';
 import { formatNumber } from '../../../utils';
-import icon from '../../../icons/cube.svg';
+import icon from '../../../icons/l2-blockchain.svg';
 
-export class BlockNumberColumn extends React.Component<ColumnProps> {
-  public static readonly label = 'Block';
+export class L2FinalizedBlockColumn extends React.Component<ColumnProps> {
+  public static readonly label = 'Layer2 Finalized Block';
   public static readonly icon = icon;
   public static readonly width = 88;
-  public static readonly setting = 'blocknumber';
-  public static readonly sortBy = ({ height }: Node) => height;
+  public static readonly setting = 'l2finalizedblock';
+  public static readonly sortBy = ({ finalized }: Node) => finalized || 0;
 
   private data = 0;
 
   public shouldComponentUpdate(nextProps: ColumnProps) {
-    return this.data !== nextProps.node.height;
+    return this.data !== nextProps.node.finalized;
   }
 
   render() {
-    const { height } = this.props.node;
+    const { finalized } = this.props.node;
 
-    this.data = height;
+    this.data = finalized;
 
-    return <td className="Column">{`#${formatNumber(height)}`}</td>;
+    return <td className="Column">{`#${formatNumber(finalized)}`}</td>;
   }
 }

@@ -69,6 +69,8 @@ export class Node {
   public stale: boolean;
   public pinned: boolean;
   public peers: Types.PeerCount;
+  public l1Peers: Types.PeerCount;
+  public l2Peers: Types.PeerCount;
   public txs: Types.TransactionCount;
   public upload: Types.BytesPerSecond[];
   public download: Types.BytesPerSecond[];
@@ -83,6 +85,8 @@ export class Node {
 
   public finalized = 0 as Types.BlockNumber;
   public finalizedHash = '' as Types.BlockHash;
+  public l2FinalizedHash = '' as Types.BlockHash;
+  public l2FinalizedNumber = 0 as Types.BlockNumber;
 
   public lat: Maybe<Types.Latitude>;
   public lon: Maybe<Types.Longitude>;
@@ -136,6 +140,18 @@ export class Node {
 
     this.peers = peers;
     this.txs = txs;
+
+    this.trigger();
+  }
+
+  public updatePeers(type: 'l1' | 'l2', stats: Types.NodeStats) {
+    const [peers] = stats;
+
+    if (type === 'l1') {
+      this.l1Peers = peers;
+    } else {
+      this.l2Peers = peers;
+    }
 
     this.trigger();
   }
@@ -255,6 +271,18 @@ export interface StateSettings {
   blockpropagation: boolean;
   blocklasttime: boolean;
   uptime: boolean;
+  l1finalizedhash: boolean;
+  l1finalizedblock: boolean;
+  l2finalizedblock: boolean;
+  l2finalizedhash: boolean;
+  verifiedblockhash: boolean;
+  verifiedblocknumber: boolean;
+  waitsubmittedblocks: boolean;
+  l1submitted: boolean;
+  l1challenged: boolean;
+  l1SubmissionAppPeriod: boolean;
+  l1finishedchallengeAppPeriod: boolean;
+  nodeuptime: boolean;
 }
 
 export interface State {

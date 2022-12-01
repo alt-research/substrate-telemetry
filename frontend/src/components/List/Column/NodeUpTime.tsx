@@ -15,30 +15,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import * as React from 'react';
-import { ColumnProps } from './';
+import { ColumnProps } from '.';
 import { Node } from '../../../state';
-import icon from '../../../icons/broadcast.svg';
+import { formatNumber } from '../../../utils';
+import icon from '../../../icons/cube.svg';
 
-export class PeersColumn extends React.Component<ColumnProps> {
-  public static readonly label = 'Peer Count';
+export class NodeUpTimeColumn extends React.Component<ColumnProps> {
+  public static readonly label = 'Node Up Time';
   public static readonly icon = icon;
-  public static readonly width = 26;
-  public static readonly setting = 'peers';
-  public static readonly sortBy = ({ peers }: Node) => peers;
+  public static readonly width = 88;
+  public static readonly setting = 'nodeuptime';
+  public static readonly sortBy = ({ height }: Node) => height;
 
-  private l1Peers = 0;
-  private l2Peers = 0;
+  private data = 0;
 
   public shouldComponentUpdate(nextProps: ColumnProps) {
-    return this.l1Peers !== nextProps.node.l1Peers || this.l2Peers !== nextProps.node.l2Peers;
+    return this.data !== nextProps.node.height;
   }
 
   render() {
-    const { l1Peers, l2Peers } = this.props.node;
+    const { height } = this.props.node;
 
-    this.l1Peers = l1Peers;
-    this.l2Peers = l2Peers;
+    this.data = height;
 
-    return <td className="Column">{l1Peers ?? '-'} | {l2Peers ?? '-'}</td>;
+    return <td className="Column">{`#${formatNumber(height)}`}</td>;
   }
 }

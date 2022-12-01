@@ -36,6 +36,8 @@ export class Settings extends React.Component<SettingsProps> {
           <h1>List View</h1>
           <h2>Visible Columns</h2>
           {Row.columns.map(({ label, icon, setting }, index) => {
+            console.log('row', label, setting);
+
             if (!setting) {
               return null;
             }

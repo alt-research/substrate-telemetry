@@ -68,6 +68,8 @@ export class Sparkline extends React.Component<SparklineProps> {
       }
     });
 
+    console.log('path', path);
+
     return (
       <>
         <Tooltip text="-" onInit={this.onTooltipInit} />

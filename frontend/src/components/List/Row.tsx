@@ -21,16 +21,13 @@ import { PersistentSet } from '../../persist';
 import {
   Column,
   NameColumn,
-  ValidatorColumn,
   LocationColumn,
   ImplementationColumn,
-  NetworkIdColumn,
   PeersColumn,
-  TxsColumn,
   UploadColumn,
   DownloadColumn,
-  StateCacheColumn,
-  BlockNumberColumn,
+  L1FinishedChallengeAppPeriod,
+  NodeUpTimeColumn,
   BlockHashColumn,
   FinalizedBlockColumn,
   FinalizedHashColumn,
@@ -38,9 +35,19 @@ import {
   BlockPropagationColumn,
   LastBlockColumn,
   UptimeColumn,
+  VerifiedBlockNumberColumn,
+  VerifiedBlockHashColumn,
+  WaitSubmittedBlocksColumn,
+  L1FinalizedBlockNumberColumn,
+  L1FinalizedBlockHashColumn,
+  L2FinalizedBlockColumn,
+  L2FinalizedHashColumn,
 } from './';
 
 import './Row.css';
+import { L1ChallengedColumn } from './Column/L1ChallengedColumn';
+import { L1SubmittedColumn } from './Column/L1SubmittedColumn';
+import { L1SubmissionAppPeriodColumn } from './Column/L1SubmissionAppPeriodColumn';
 
 interface RowProps {
   node: Node;
@@ -60,15 +67,18 @@ export class Row extends React.Component<RowProps, RowState> {
     PeersColumn,
     UploadColumn,
     DownloadColumn,
-    StateCacheColumn,
-    BlockNumberColumn,
-    BlockHashColumn,
-    FinalizedBlockColumn,
-    FinalizedHashColumn,
-    BlockTimeColumn,
-    BlockPropagationColumn,
-    LastBlockColumn,
-    UptimeColumn,
+    VerifiedBlockNumberColumn,
+    VerifiedBlockHashColumn,
+    WaitSubmittedBlocksColumn,
+    L2FinalizedBlockColumn,
+    L2FinalizedHashColumn,
+    L1FinalizedBlockNumberColumn,
+    L1FinalizedBlockHashColumn,
+    L1SubmittedColumn,
+    L1ChallengedColumn,
+    L1SubmissionAppPeriodColumn,
+    L1FinishedChallengeAppPeriod,
+    NodeUpTimeColumn,
   ];
 
   private renderedChangeRef = 0;
@@ -98,6 +108,8 @@ export class Row extends React.Component<RowProps, RowState> {
     if (node.stale) {
       className += ' Row-stale';
     }
+
+    console.log('columns', columns);
 
     return (
       <tr className={className} onClick={this.toggle}>

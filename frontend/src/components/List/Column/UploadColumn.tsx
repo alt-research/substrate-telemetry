@@ -44,6 +44,8 @@ export class UploadColumn extends React.Component<ColumnProps> {
       return <td className="Column">-</td>;
     }
 
+    console.log('upload', upload, 'chartstamps', chartstamps);
+
     return (
       <td className="Column">
         <Sparkline

@@ -29,7 +29,7 @@ import {
   FinalizedHashColumn,
   UploadColumn,
   DownloadColumn,
-  StateCacheColumn,
+  L1FinishedChallengeAppPeriod,
 } from './components/List';
 
 const CONNECTION_TIMEOUT_BASE = (1000 * 5) as Types.Milliseconds; // 5 seconds
@@ -258,7 +258,7 @@ export class Connection {
           nodes.mutAndMaybeSort(
             id,
             (node) => node.updateStats(nodeStats),
-            sortByColumn === PeersColumn || sortByColumn === TxsColumn
+            sortByColumn === PeersColumn
           );
 
           break;
@@ -282,7 +282,7 @@ export class Connection {
           nodes.mutAndMaybeSort(
             id,
             (node) => node.updateIO(nodeIO),
-            sortByColumn === StateCacheColumn
+            sortByColumn === L1FinishedChallengeAppPeriod
           );
 
           break;
@@ -383,7 +383,13 @@ export class Connection {
         }
 
         case ACTIONS.Layer1NodeStatsUpdate: {
+          const [id, nodeStats] = message.payload;
 
+          nodes.mutAndMaybeSort(
+            id,
+            (node) => node.updatePeers('l1', nodeStats),
+            sortByColumn === PeersColumn
+          );
           break;
         }
 
@@ -399,7 +405,7 @@ export class Connection {
         }
 
         case ACTIONS.Layer2FinalizedBlock: {
-          const [, blockNumber, blockHash] = message.payload;
+          const [nodeId, blockNumber, blockHash] = message.payload;
           nodes.mutEach((node) => node.newBestBlock());
 
           this.appUpdate({l2FinalizedBlockHash: blockHash, l2FinalizedBlockNumber: blockNumber });
@@ -407,7 +413,13 @@ export class Connection {
         }
 
         case ACTIONS.Layer2NodeStatsUpdate: {
+          const [id, nodeStats] = message.payload;
 
+          nodes.mutAndMaybeSort(
+            id,
+            (node) => node.updatePeers('l2', nodeStats),
+            sortByColumn === PeersColumn
+          );
           break;
         }
 
