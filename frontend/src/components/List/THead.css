@@ -17,13 +17,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
 .THead {
-  background: #393838;
+  background: #373741;
+  border-radius: 4px;
 }
 
 .THeadCell {
   text-align: left;
-  padding: 8px 13px;
-  height: 23px;
+  padding: 0px 13px;
+  height: 36px;
 }
 
 .THeadCell-sortable {

@@ -17,94 +17,96 @@
 import * as React from 'react';
 import { Types, Maybe } from '../../common';
 import { formatNumber, secondsWithPrecision } from '../../utils';
-import { Tab, ChainDisplay } from './';
+import { ChainDisplay } from './';
 import { Tile, Ago } from '../';
 
-import blockIcon from '../../icons/cube.svg';
-import finalizedIcon from '../../icons/cube-alt.svg';
-import blockTimeIcon from '../../icons/history.svg';
-import lastTimeIcon from '../../icons/watch.svg';
-import listIcon from '../../icons/list-alt-regular.svg';
-import worldIcon from '../../icons/location.svg';
-import settingsIcon from '../../icons/settings.svg';
-import statsIcon from '../../icons/graph.svg';
+import l2FinalIcon from '../../icons/l2-final.svg';
+import submittedDigestIcon from '../../icons/l1-submitted-digest.svg';
+import chanllengedDigestIcon from '../../icons/l1-challenged-digest.svg';
+import submissionAppPeriodIcon from '../../icons/l1-submission-appperiod.svg';
+import finishedChallengeAppPeriodIcon from '../../icons/l1-finished-challenge-appperiod.svg';
 
 import './Header.css';
+import styled from 'styled-components';
+
+const Labeled = styled('div')`
+  border-left: 2px solid #6667ab;
+  padding-left: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 14px;
+
+  span.title {
+    font-size: 13px;
+    font-weight: bold;
+    color: #a4a4b2;
+    margin-right: 4px;
+  }
+`;
 
 interface HeaderProps {
-  best: Types.BlockNumber;
-  finalized: Types.BlockNumber;
-  blockTimestamp: Types.Timestamp;
-  blockAverage: Maybe<Types.Milliseconds>;
+  l2FinalizedBlockNumber: Types.BlockNumber,
+  l2FinalizedBlockHash: Types.BlockHash,
+  submittedDigestHash: Types.DigestHash,
+  submittedBlockHash: Types.BlockHash,
+  challengedBlockHash: Types.BlockHash,
+  challengedDigestHash: Types.DigestHash,
+  submittedPeriod: Types.AppPeriod,
+  challengedPeriod: Types.AppPeriod,
   currentTab: ChainDisplay;
-  setDisplay: (display: ChainDisplay) => void;
 }
 
 export class Header extends React.Component<HeaderProps> {
   public shouldComponentUpdate(nextProps: HeaderProps) {
     return (
-      this.props.best !== nextProps.best ||
-      this.props.finalized !== nextProps.finalized ||
-      this.props.blockTimestamp !== nextProps.blockTimestamp ||
-      this.props.blockAverage !== nextProps.blockAverage ||
+      this.props.l2FinalizedBlockNumber !== nextProps.l2FinalizedBlockNumber ||
+      this.props.l2FinalizedBlockHash !== nextProps.l2FinalizedBlockHash ||
+      this.props.submittedDigestHash !== nextProps.submittedDigestHash ||
+      this.props.submittedBlockHash !== nextProps.submittedBlockHash ||
+      this.props.submittedPeriod !== nextProps.submittedPeriod ||
+      this.props.challengedDigestHash !== nextProps.challengedDigestHash ||
+      this.props.challengedBlockHash !== nextProps.challengedBlockHash ||
+      this.props.challengedPeriod !== nextProps.challengedPeriod ||
       this.props.currentTab !== nextProps.currentTab
     );
   }
 
   public render() {
-    const { best, finalized, blockTimestamp, blockAverage } = this.props;
-    const { currentTab, setDisplay } = this.props;
+    const {
+      l2FinalizedBlockNumber,
+      l2FinalizedBlockHash,
+      submittedBlockHash,
+      submittedDigestHash,
+      challengedDigestHash,
+      challengedBlockHash,
+      submittedPeriod,
+      challengedPeriod,
+    } = this.props;
 
     return (
       <div className="Header">
-        <Tile icon={blockIcon} title="Best Block">
-          #{formatNumber(best)}
+        <Tile icon={l2FinalIcon} title="L2 finalize block & hash" suffix={<p style={{
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+          fontSize: '14px'
+        }}>{l2FinalizedBlockHash}</p>}>
+          #{formatNumber(l2FinalizedBlockNumber)}
         </Tile>
-        <Tile icon={finalizedIcon} title="Finalized Block">
-          #{formatNumber(finalized)}
+        <div className="divider" />
+        <Tile icon={submittedDigestIcon} title="L1 submitted digest" suffix={<Labeled><span className="title">Block hash</span>{submittedBlockHash}</Labeled>}>
+          {submittedDigestHash || '0x'}
         </Tile>
-        <Tile icon={blockTimeIcon} title="Average Time">
-          {blockAverage == null
-            ? '-'
-            : secondsWithPrecision(blockAverage / 1000)}
+        <Tile icon={chanllengedDigestIcon} title="L1 challenged digest" suffix={<Labeled><span className="title">Block hash</span>{challengedBlockHash}</Labeled>}>
+          {challengedDigestHash || '0x'}
         </Tile>
-        <Tile icon={lastTimeIcon} title="Last Block">
-          <Ago when={blockTimestamp} />
+        <Tile icon={submissionAppPeriodIcon} title="L1 submission AppPeriod">
+          {formatNumber(submittedPeriod)}
         </Tile>
-        <div className="Header-tabs">
-          <Tab
-            icon={listIcon}
-            label="List"
-            display="list"
-            tab=""
-            current={currentTab}
-            setDisplay={setDisplay}
-          />
-          <Tab
-            icon={worldIcon}
-            label="Map"
-            display="map"
-            tab="map"
-            current={currentTab}
-            setDisplay={setDisplay}
-          />
-          <Tab
-            icon={statsIcon}
-            label="Stats"
-            display="stats"
-            tab="stats"
-            current={currentTab}
-            setDisplay={setDisplay}
-          />
-          <Tab
-            icon={settingsIcon}
-            label="Settings"
-            display="settings"
-            tab="settings"
-            current={currentTab}
-            setDisplay={setDisplay}
-          />
-        </div>
+        <Tile icon={finishedChallengeAppPeriodIcon} title="L1 last finished challenge AppPeriod">
+          {formatNumber(challengedPeriod)}
+        </Tile>
       </div>
     );
   }

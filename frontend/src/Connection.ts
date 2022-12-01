@@ -1,3 +1,4 @@
+import { DigestHash } from './common/types';
 // Source code for the Substrate Telemetry Server.
 // Copyright (C) 2021 Parity Technologies (UK) Ltd.
 //
@@ -68,7 +69,7 @@ export class Connection {
       return `wss://${window.location.hostname}/feed/`;
     }
 
-    return 'ws://127.0.0.1:8000/feed';
+    return 'ws://localhost:8000/feed';
   }
 
   private static async socket(): Promise<WebSocket> {
@@ -163,30 +164,11 @@ export class Connection {
     }
 
     for (const message of messages) {
-      console.log(message);
       switch (message.action) {
         case ACTIONS.FeedVersion: {
           if (message.payload !== VERSION) {
             return this.newVersion();
           }
-
-          break;
-        }
-
-        case ACTIONS.BestBlock: {
-          const [best, blockTimestamp, blockAverage] = message.payload;
-
-          nodes.mutEach((node) => node.newBestBlock());
-
-          this.appUpdate({ best, blockTimestamp, blockAverage });
-
-          break;
-        }
-
-        case ACTIONS.BestFinalized: {
-          const [finalized /*, hash */] = message.payload;
-
-          this.appUpdate({ finalized });
 
           break;
         }
@@ -365,6 +347,106 @@ export class Connection {
 
         case ACTIONS.ChainStatsUpdate: {
           this.appUpdate({ chainStats: message.payload });
+          break;
+        }
+
+        case ACTIONS.SubmittedBlock: {
+          const [blockNumber, blockHash] = message.payload;
+
+          this.appUpdate({ submittedBlockHash: blockHash, submittedBlockNumber: blockNumber });
+          break;
+        }
+
+        case ACTIONS.ChallengedBlock: {
+          const [blockNumber, blockHash] = message.payload;
+
+          this.appUpdate({ challengedBlockHash:  blockHash, challengedBlockNumber: blockNumber })
+          break;
+        }
+
+        case ACTIONS.Period: {
+          const [submittedPeriod, challengedPeriod] = message.payload;
+
+          this.appUpdate({ submittedPeriod, challengedPeriod });
+          break;
+        }
+
+        case ACTIONS.Layer1ImportedBlock: {
+
+          break;
+        }
+
+        case ACTIONS.Layer1FinalizedBlock: {
+
+          break;
+        }
+
+        case ACTIONS.Layer1NodeStatsUpdate: {
+
+          break;
+        }
+
+        case ACTIONS.Layer1NodeIOUpdate: {
+
+          break;
+        }
+
+        case ACTIONS.Layer2ImportedBlock: {
+          this.appUpdate({ layer2ImportedBlock: message.payload[1] });
+
+          break;
+        }
+
+        case ACTIONS.Layer2FinalizedBlock: {
+          const [, blockNumber, blockHash] = message.payload;
+          nodes.mutEach((node) => node.newBestBlock());
+
+          this.appUpdate({l2FinalizedBlockHash: blockHash, l2FinalizedBlockNumber: blockNumber });
+          break;
+        }
+
+        case ACTIONS.Layer2NodeStatsUpdate: {
+
+          break;
+        }
+
+        case ACTIONS.Layer2NodeIOUpdate: {
+
+          break;
+        }
+
+        case ACTIONS.VerifierNodeSubmittedBlockStats: {
+          const [, {
+            digest,
+            block_number,
+            block_hash,
+          }
+          ] = message.payload;
+
+          this.appUpdate({ submittedBlockHash: block_hash, submittedBlockNumber: block_number, submittedDigestHash: digest });
+
+          break;
+        }
+
+        case ACTIONS.VerifierNodeChallengedBlockStats: {
+          const [, {
+            digest,
+            block_number,
+            block_hash,
+          }
+          ] = message.payload;
+          this.appUpdate({ challengedBlockHash: block_hash, challengedBlockNumber: block_number, challengedDigestHash: digest });
+
+          break;
+        }
+
+        case ACTIONS.VerifierNodeSubmissionPeriodStats: {
+
+          break;
+        }
+
+        case ACTIONS.VerifierNodeChallengePeriodStats: {
+
           break;
         }
 

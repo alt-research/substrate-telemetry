@@ -16,26 +16,20 @@
 
 import * as React from 'react';
 import './Tile.css';
-import { Icon } from './Icon';
 
 interface TileProps {
-  title: React.ReactNode | string;
+  title: string;
   icon: string;
   children?: React.ReactNode;
-  suffix?: React.ReactNode;
+  className?: string;
 }
 
-export function Tile(props: TileProps) {
+function Tabs(props: TileProps) {
   return (
-    <div className="Tile">
-      <Icon src={props.icon} />
-      <div>
-        {
-          typeof props.title === 'string' ? <p className="Tile-label">{props.title}</p> : props.title
-         }
-        <p className="Tile-content">{props.children}</p>
-        {props.suffix}
-      </div>
+    <div className={props.className}>
+
     </div>
   );
 }
+
+export default Tabs;

@@ -46,11 +46,11 @@ export type NetworkId = Opaque<string, 'NetworkId'>;
 // for verifier
 export type AppPeriod = Opaque<number, 'AppPeriod'>;
 export type DigestHash = Opaque<string, 'DigestHash'>;
-export type VerifierBlockInfos = [
-  DigestHash,
-  BlockNumber,
-  BlockHash,
-];
+export type VerifierBlockInfos = {
+  digest: DigestHash,
+  block_number: BlockNumber,
+  block_hash: BlockHash,
+}
 
 export type BlockDetails = [
   BlockNumber,

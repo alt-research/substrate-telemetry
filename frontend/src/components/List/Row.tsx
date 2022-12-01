@@ -55,12 +55,9 @@ interface RowState {
 export class Row extends React.Component<RowProps, RowState> {
   public static readonly columns: Column[] = [
     NameColumn,
-    ValidatorColumn,
     LocationColumn,
     ImplementationColumn,
-    NetworkIdColumn,
     PeersColumn,
-    TxsColumn,
     UploadColumn,
     DownloadColumn,
     StateCacheColumn,

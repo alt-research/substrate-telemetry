@@ -29,6 +29,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
   left: 0;
   right: 0;
   top: 0;
+  bottom: 0px;
   padding: 6px 13px;
   overflow: hidden;
   text-overflow: ellipsis;

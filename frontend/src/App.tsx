@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 import { Types, SortedCollection, Maybe, Compare } from './common';
-import { AllChains, Chains, Chain, Ago, OfflineIndicator } from './components';
+import { AllChains, Chain, Ago, OfflineIndicator } from './components';
 import { Row, Column } from './components/List';
 import { Connection } from './Connection';
 import { Persistent, PersistentObject, PersistentSet } from './persist';
@@ -32,6 +32,7 @@ import {
 import { getHashData } from './utils';
 
 import './App.css';
+import Header from './components/Header';
 
 export default class App extends React.Component {
   private chainsCache: ChainData[] = [];
@@ -49,6 +50,7 @@ export default class App extends React.Component {
     this.settings = new PersistentObject(
       'settings',
       {
+        name: true,
         validator: true,
         location: true,
         implementation: true,
@@ -99,8 +101,17 @@ export default class App extends React.Component {
 
     this.appUpdate = bindState(this, {
       status: 'offline',
-      best: 0 as Types.BlockNumber,
-      finalized: 0 as Types.BlockNumber,
+      l2FinalizedBlockNumber: 0 as Types.BlockNumber,
+      l2FinalizedBlockHash: '' as Types.BlockHash,
+      submittedBlockNumber: 0 as Types.BlockNumber,
+      submittedBlockHash: '' as Types.BlockHash,
+      submittedDigestHash: '' as Types.DigestHash,
+      challengedBlockNumber: 0 as Types.BlockNumber,
+      challengedBlockHash: '' as Types.BlockHash,
+      challengedDigestHash: '' as Types.DigestHash,
+      submittedPeriod: 0 as Types.AppPeriod,
+      challengedPeriod: 0 as Types.AppPeriod,
+      layer2ImportedBlock: [] as unknown as Types.BlockDetails,
       blockTimestamp: 0 as Types.Timestamp,
       blockAverage: null,
       timeDiff: 0 as Types.Milliseconds,
@@ -158,12 +169,7 @@ export default class App extends React.Component {
     return (
       <div className="App">
         <OfflineIndicator status={status} />
-        <Chains
-          chains={chains}
-          subscribedHash={subscribed}
-          subscribedData={subscribedData}
-          connection={this.connection}
-        />
+        <Header chains={chains} connection={this.connection} subscribed={subscribed} subscribedData={subscribedData} />
         <Chain
           appState={this.appState}
           appUpdate={this.appUpdate}

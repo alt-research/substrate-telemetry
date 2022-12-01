@@ -21,8 +21,7 @@ import { Types, Maybe } from '../common';
 import { ChainData } from '../state';
 import { viewport } from '../utils';
 
-import githubIcon from '../icons/mark-github.svg';
-import listIcon from '../icons/kebab-horizontal.svg';
+import listIcon from '../icons/drop-arrow.svg';
 import './Chains.css';
 
 interface ChainsProps {
@@ -77,23 +76,16 @@ export class Chains extends React.Component<ChainsProps> {
 
     return (
       <div className="Chains">
-        {subscribedChain}
-        {renderedChains}
+        <div>
+          {subscribedChain}
+          {renderedChains}
+        </div>
         <a
           className="Chains-all-chains"
           href={allChainsHref}
           title="All Chains"
         >
           <Icon src={listIcon} />
-        </a>
-        <a
-          className="Chains-fork-me"
-          href="https://github.com/paritytech/substrate-telemetry"
-          target="_blank"
-          title="Fork Me!"
-          rel="noreferrer"
-        >
-          <Icon src={githubIcon} />
         </a>
       </div>
     );
@@ -115,7 +107,7 @@ export class Chains extends React.Component<ChainsProps> {
         className={className}
         onClick={this.subscribe.bind(this, genesisHash)}
       >
-        <span>{label}</span>
+        <span className="Chains-name">{label}</span>
         <span className="Chains-node-count" title="Node Count">
           {nodeCount}
         </span>
