@@ -1,0 +1,97 @@
+name: Release Docker Images
+
+on:
+  push:
+    tags: ["**"]
+  workflow_dispatch:
+  release:
+    types: [created]
+
+env:
+  ECR_REGISTRY: 305587085711.dkr.ecr.us-west-2.amazonaws.com
+
+jobs:
+  backend:
+    name: Build and Push Backend Image
+    runs-on: ubuntu-latest
+    env:
+      REPO: verifier-telemetry-backend
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to ECR
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.ECR }}
+          username: ${{ secrets.ECR_ACCESS_KEY_ID }}
+          password: ${{ secrets.ECR_ACCESS_KEY }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        id: docker-builder
+        uses: docker/setup-buildx-action@v2
+
+      - name: Prepare Environment Variables
+        run: |
+          echo "HOME=$HOME" | tee -a $GITHUB_ENV
+          echo "BUILDX_BUILDER=${{ steps.docker-builder.outputs.name }}" | tee -a $GITHUB_ENV
+          echo "BUILDX_BUILDER_CONTAINER=buildx_buildkit_${{ steps.docker-builder.outputs.name }}0" | tee -a $GITHUB_ENV
+          echo "SHORT_SHA=${GITHUB_SHA::7}" | tee -a $GITHUB_ENV
+          echo "REF_NAME=$(echo ${GITHUB_REF_NAME} | sed 's/[^a-zA-Z0-9._]/-/g')" | tee -a $GITHUB_ENV
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: ./backend
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          tags: |
+            ${{ env.ECR }}/${{ env.REPO }}:latest
+            ${{ env.ECR }}/${{ env.REPO }}:${{ env.REF_NAME }}
+            ${{ env.ECR }}/${{ env.REPO }}:${{ env.SHORT_SHA }}
+            ${{ env.ECR }}/${{ env.REPO }}:${{ env.REF_NAME }}-${{ env.SHORT_SHA }}
+  frontend:
+    name: Build and Push Frontend Image
+    runs-on: ubuntu-latest
+    env:
+      REPO: verifier-telemetry-frontend
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to ECR
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.ECR }}
+          username: ${{ secrets.ECR_ACCESS_KEY_ID }}
+          password: ${{ secrets.ECR_ACCESS_KEY }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        id: docker-builder
+        uses: docker/setup-buildx-action@v2
+
+      - name: Prepare Environment Variables
+        run: |
+          echo "HOME=$HOME" | tee -a $GITHUB_ENV
+          echo "BUILDX_BUILDER=${{ steps.docker-builder.outputs.name }}" | tee -a $GITHUB_ENV
+          echo "BUILDX_BUILDER_CONTAINER=buildx_buildkit_${{ steps.docker-builder.outputs.name }}0" | tee -a $GITHUB_ENV
+          echo "SHORT_SHA=${GITHUB_SHA::7}" | tee -a $GITHUB_ENV
+          echo "REF_NAME=$(echo ${GITHUB_REF_NAME} | sed 's/[^a-zA-Z0-9._]/-/g')" | tee -a $GITHUB_ENV
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: ./frontend
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          tags: |
+            ${{ env.ECR }}/${{ env.REPO }}:latest
+            ${{ env.ECR }}/${{ env.REPO }}:${{ env.REF_NAME }}
+            ${{ env.ECR }}/${{ env.REPO }}:${{ env.SHORT_SHA }}
+            ${{ env.ECR }}/${{ env.REPO }}:${{ env.REF_NAME }}-${{ env.SHORT_SHA }}
