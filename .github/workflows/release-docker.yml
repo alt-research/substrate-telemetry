@@ -8,7 +8,7 @@ on:
     types: [created]
 
 env:
-  ECR_REGISTRY: 305587085711.dkr.ecr.us-west-2.amazonaws.com
+  ECR: 305587085711.dkr.ecr.us-west-2.amazonaws.com
 
 jobs:
   backend:
