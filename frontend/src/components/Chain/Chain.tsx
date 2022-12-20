@@ -66,7 +66,16 @@ export class Chain extends React.Component<ChainProps, ChainState> {
 
   public render() {
     const { appState } = this.props;
-    const { l2FinalizedBlockHash, l2FinalizedBlockNumber, submittedDigestHash, submittedBlockHash, submittedPeriod, challengedDigestHash, challengedBlockHash, challengedPeriod } = appState;
+    const {
+      l2FinalizedBlockHash,
+      l2FinalizedBlockNumber,
+      submittedDigestHash,
+      submittedBlockHash,
+      submittedPeriod,
+      challengedDigestHash,
+      challengedBlockHash,
+      challengedPeriod,
+    } = appState;
     const { display: currentTab } = this.state;
 
     return (

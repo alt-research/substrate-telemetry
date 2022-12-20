@@ -45,12 +45,14 @@ export type NetworkId = Opaque<string, 'NetworkId'>;
 
 // for verifier
 export type AppPeriod = Opaque<number, 'AppPeriod'>;
+export type AppId = Opaque<number, 'AppId'>;
 export type DigestHash = Opaque<string, 'DigestHash'>;
+export type VerifierAccountId = Opaque<string, 'VerifierAccountId'>;
 export type VerifierBlockInfos = {
-  digest: DigestHash,
-  block_number: BlockNumber,
-  block_hash: BlockHash,
-}
+  digest: DigestHash;
+  block_number: BlockNumber;
+  block_hash: BlockHash;
+};
 
 export type BlockDetails = [
   BlockNumber,
@@ -120,4 +122,12 @@ export type ChainStats = {
   memory_memcpy_score: Maybe<Ranking<Range>>;
   disk_sequential_write_score: Maybe<Ranking<Range>>;
   disk_random_write_score: Maybe<Ranking<Range>>;
+};
+
+export type VerifierNodeDetailInfos = {
+  layer1_genesis_hash: GenesisHash;
+  layer2_genesis_hash: GenesisHash;
+  layer2_app_id: AppId;
+  verifier: VerifierAccountId;
+  name: NodeName;
 };

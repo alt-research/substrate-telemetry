@@ -56,14 +56,15 @@ export class Node {
   }
 
   public readonly id: Types.NodeId;
-  public readonly name: Types.NodeName;
+  // will change by notification.
+  public name: Types.NodeName;
   public readonly implementation: Types.NodeImplementation;
   public readonly version: Types.NodeVersion;
   public readonly validator: Maybe<Types.Address>;
   public readonly networkId: Maybe<Types.NetworkId>;
   public readonly startupTime: Maybe<Types.Timestamp>;
 
-  public readonly sortableName: string;
+  public sortableName: string;
   public readonly sortableVersion: number;
 
   public stale: boolean;
@@ -83,6 +84,12 @@ export class Node {
 
   public finalized = 0 as Types.BlockNumber;
   public finalizedHash = '' as Types.BlockHash;
+
+  // datas for verifier
+  public layer1_genesis_hash: Types.GenesisHash;
+  public layer2_genesis_hash: Types.GenesisHash;
+  public layer2_app_id: Types.AppId;
+  public verifier_account: Types.VerifierAccountId;
 
   public lat: Maybe<Types.Latitude>;
   public lon: Maybe<Types.Longitude>;
@@ -186,6 +193,18 @@ export class Node {
     this.trigger();
   }
 
+  public updateVerifierNodeDetails(details: Types.VerifierNodeDetailInfos) {
+    console.log('update details: ', details);
+    this.layer2_app_id = details.layer2_app_id;
+    this.layer1_genesis_hash = details.layer1_genesis_hash;
+    this.layer2_genesis_hash = details.layer2_genesis_hash;
+    this.verifier_account = details.verifier;
+    this.name = details.name;
+    this.sortableName = this.name.toLocaleLowerCase();
+
+    this.trigger();
+  }
+
   public newBestBlock() {
     if (this.propagationTime != null) {
       this.propagationTime = null;
@@ -255,12 +274,13 @@ export interface StateSettings {
   blockpropagation: boolean;
   blocklasttime: boolean;
   uptime: boolean;
+  verifier: boolean;
 }
 
 export interface State {
   status: 'online' | 'offline' | 'upgrade-requested';
-  l2FinalizedBlockNumber: Types.BlockNumber,
-  l2FinalizedBlockHash: Types.BlockHash,
+  l2FinalizedBlockNumber: Types.BlockNumber;
+  l2FinalizedBlockHash: Types.BlockHash;
   submittedBlockNumber: Types.BlockNumber;
   submittedBlockHash: Types.BlockHash;
   submittedDigestHash: Types.DigestHash;

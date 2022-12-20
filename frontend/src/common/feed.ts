@@ -40,6 +40,7 @@ import {
   ChainStats,
   AppPeriod,
   VerifierBlockInfos,
+  VerifierNodeDetailInfos,
 } from './types';
 
 export const ACTIONS = {
@@ -81,6 +82,7 @@ export const ACTIONS = {
   VerifierNodeChallengedBlockStats: 0x52 as const,
   VerifierNodeSubmissionPeriodStats: 0x53 as const,
   VerifierNodeChallengePeriodStats: 0x54 as const,
+  VerifierNodeDetailsStats: 0x55 as const,
 };
 
 export type Action = typeof ACTIONS[keyof typeof ACTIONS];
@@ -291,6 +293,10 @@ interface VerifierNodeChallengePeriodStats extends MessageBase {
   payload: [NodeId, AppPeriod];
 }
 
+interface VerifierNodeDetailsStats extends MessageBase {
+  action: typeof ACTIONS.VerifierNodeDetailsStats;
+  payload: [NodeId, VerifierNodeDetailInfos];
+}
 
 export type Message =
   | FeedVersionMessage
@@ -330,7 +336,8 @@ export type Message =
   | VerifierNodeSubmittedBlockStats
   | VerifierNodeChallengedBlockStats
   | VerifierNodeSubmissionPeriodStats
-  | VerifierNodeChallengePeriodStats;
+  | VerifierNodeChallengePeriodStats
+  | VerifierNodeDetailsStats;
 
 /**
  * Data type to be sent to the feed. Passing through strings means we can only serialize once,
