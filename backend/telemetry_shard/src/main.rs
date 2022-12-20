@@ -323,22 +323,23 @@ where
                 // Deserialize from JSON, warning in debug mode if deserialization fails:
                 let node_message: json_message::NodeMessage = match serde_json::from_slice(&bytes) {
                     Ok(node_message) => node_message,
+                    #[cfg(debug)]
                     Err(e) => {
                         let bytes: &[u8] = bytes.get(..512).unwrap_or_else(|| &bytes);
                         let msg_start = std::str::from_utf8(bytes).unwrap_or_else(|_| "INVALID UTF8");
                         log::warn!("Failed to parse node message ({msg_start}): {e}");
                         continue;
+                    },
+                    #[cfg(not(debug))]
+                    Err(_) => {
+                        continue;
                     }
                 };
-
-                log::info!("node_message {:?}", node_message);
 
                 // Pull relevant details from the message:
                 let node_message: node_message::NodeMessage = node_message.into();
                 let message_id = node_message.id();
                 let payload = node_message.into_payload();
-
-                log::info!("node_message payload {:?}", payload);
 
                 // Until the aggregator receives an `Add` message, which we can create once
                 // we see one of these SystemConnected ones, it will ignore messages with
