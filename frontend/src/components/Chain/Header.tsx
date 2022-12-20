@@ -15,10 +15,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import * as React from 'react';
-import { Types, Maybe } from '../../common';
-import { formatNumber, secondsWithPrecision } from '../../utils';
+import { Types } from '../../common';
+import { formatNumber } from '../../utils';
 import { ChainDisplay } from './';
-import { Tile, Ago } from '../';
+import { Tile } from '../';
 
 import l2FinalIcon from '../../icons/l2-final.svg';
 import submittedDigestIcon from '../../icons/l1-submitted-digest.svg';

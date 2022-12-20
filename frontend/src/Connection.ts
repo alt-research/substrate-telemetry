@@ -1,4 +1,3 @@
-import { DigestHash } from './common/types';
 // Source code for the Substrate Telemetry Server.
 // Copyright (C) 2021 Parity Technologies (UK) Ltd.
 //

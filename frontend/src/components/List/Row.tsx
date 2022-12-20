@@ -21,12 +21,9 @@ import { PersistentSet } from '../../persist';
 import {
   Column,
   NameColumn,
-  ValidatorColumn,
   LocationColumn,
   ImplementationColumn,
-  NetworkIdColumn,
   PeersColumn,
-  TxsColumn,
   UploadColumn,
   DownloadColumn,
   StateCacheColumn,
