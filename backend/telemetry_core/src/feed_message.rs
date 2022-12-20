@@ -142,6 +142,7 @@ actions! {
     82: VerifierNodeChallengedBlockStats<'_>,
     83: VerifierNodeSubmissionPeriodStats,
     84: VerifierNodeChallengePeriodStats,
+    85: VerifierNodeDetailsStats<'_>,
 }
 
 #[derive(Serialize)]

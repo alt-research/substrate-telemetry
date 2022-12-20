@@ -251,6 +251,13 @@ impl Chain {
                     self.stats_collator
                         .update_hwbench(node.hwbench(), CounterValue::Increment);
                 }
+                Payload::VerifierNodeDetails(ref details) => {
+                    if node.update_verifier_details(details) {
+                        if let Some(details) = node.verifier_details() {
+                            feed.push(feed_message::VerifierNodeDetailsStats(nid.into(), details));
+                        }
+                    }
+                }
                 Payload::VerifierDetailsStats(ref details) => {
                     if let (
                         Some(submitted_digest),

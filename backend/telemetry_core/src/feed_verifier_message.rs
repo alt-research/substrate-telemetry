@@ -4,6 +4,7 @@
 use crate::feed_message::*;
 use common::node_types::{
     AppPeriod, BlockDetails, BlockHash, BlockNumber, NodeIO, NodeStats, VerifierBlockInfos,
+    VerifierNodeDetails,
 };
 use serde::{Deserialize, Serialize};
 
@@ -57,3 +58,6 @@ pub struct VerifierNodeSubmissionPeriodStats(pub FeedNodeId, pub AppPeriod);
 
 #[derive(Serialize)]
 pub struct VerifierNodeChallengePeriodStats(pub FeedNodeId, pub AppPeriod);
+
+#[derive(Serialize)]
+pub struct VerifierNodeDetailsStats<'a>(pub FeedNodeId, pub &'a VerifierNodeDetails);
