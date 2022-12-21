@@ -15,6 +15,8 @@ pub struct VerifierNodeDetails {
     pub layer2_app_id: u32,
     /// The verifier public key.
     pub verifier: Box<str>,
+    /// The name of the verifier node.
+    pub name: Box<str>,
 }
 
 impl From<VerifierNodeDetails> for internal::VerifierNodeDetails {
@@ -24,6 +26,7 @@ impl From<VerifierNodeDetails> for internal::VerifierNodeDetails {
             layer2_genesis_hash: msg.layer2_genesis_hash.into(),
             layer2_app_id: msg.layer2_app_id,
             verifier: msg.verifier,
+            name: msg.name,
         }
     }
 }

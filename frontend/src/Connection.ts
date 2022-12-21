@@ -1,4 +1,3 @@
-import { DigestHash } from './common/types';
 // Source code for the Substrate Telemetry Server.
 // Copyright (C) 2021 Parity Technologies (UK) Ltd.
 //
@@ -353,14 +352,20 @@ export class Connection {
         case ACTIONS.SubmittedBlock: {
           const [blockNumber, blockHash] = message.payload;
 
-          this.appUpdate({ submittedBlockHash: blockHash, submittedBlockNumber: blockNumber });
+          this.appUpdate({
+            submittedBlockHash: blockHash,
+            submittedBlockNumber: blockNumber,
+          });
           break;
         }
 
         case ACTIONS.ChallengedBlock: {
           const [blockNumber, blockHash] = message.payload;
 
-          this.appUpdate({ challengedBlockHash:  blockHash, challengedBlockNumber: blockNumber })
+          this.appUpdate({
+            challengedBlockHash: blockHash,
+            challengedBlockNumber: blockNumber,
+          });
           break;
         }
 
@@ -372,22 +377,18 @@ export class Connection {
         }
 
         case ACTIONS.Layer1ImportedBlock: {
-
           break;
         }
 
         case ACTIONS.Layer1FinalizedBlock: {
-
           break;
         }
 
         case ACTIONS.Layer1NodeStatsUpdate: {
-
           break;
         }
 
         case ACTIONS.Layer1NodeIOUpdate: {
-
           break;
         }
 
@@ -401,51 +402,64 @@ export class Connection {
           const [, blockNumber, blockHash] = message.payload;
           nodes.mutEach((node) => node.newBestBlock());
 
-          this.appUpdate({l2FinalizedBlockHash: blockHash, l2FinalizedBlockNumber: blockNumber });
+          this.appUpdate({
+            l2FinalizedBlockHash: blockHash,
+            l2FinalizedBlockNumber: blockNumber,
+          });
           break;
         }
 
         case ACTIONS.Layer2NodeStatsUpdate: {
-
           break;
         }
 
         case ACTIONS.Layer2NodeIOUpdate: {
-
           break;
         }
 
         case ACTIONS.VerifierNodeSubmittedBlockStats: {
-          const [, {
-            digest,
-            block_number,
-            block_hash,
-          }
-          ] = message.payload;
+          const [, { digest, block_number, block_hash }] = message.payload;
 
-          this.appUpdate({ submittedBlockHash: block_hash, submittedBlockNumber: block_number, submittedDigestHash: digest });
+          this.appUpdate({
+            submittedBlockHash: block_hash,
+            submittedBlockNumber: block_number,
+            submittedDigestHash: digest,
+          });
 
           break;
         }
 
         case ACTIONS.VerifierNodeChallengedBlockStats: {
-          const [, {
-            digest,
-            block_number,
-            block_hash,
-          }
-          ] = message.payload;
-          this.appUpdate({ challengedBlockHash: block_hash, challengedBlockNumber: block_number, challengedDigestHash: digest });
+          const [, { digest, block_number, block_hash }] = message.payload;
+          this.appUpdate({
+            challengedBlockHash: block_hash,
+            challengedBlockNumber: block_number,
+            challengedDigestHash: digest,
+          });
 
           break;
         }
 
         case ACTIONS.VerifierNodeSubmissionPeriodStats: {
-
           break;
         }
 
         case ACTIONS.VerifierNodeChallengePeriodStats: {
+          break;
+        }
+
+        case ACTIONS.VerifierNodeDetailsStats: {
+          console.log(
+            'VerifierNodeDetailsStats : ' + JSON.stringify(message.payload)
+          );
+
+          const [id, details] = message.payload;
+
+          nodes.mutAndMaybeSort(
+            id,
+            (node) => node.updateVerifierNodeDetails(details),
+            sortByColumn === LocationColumn
+          );
 
           break;
         }

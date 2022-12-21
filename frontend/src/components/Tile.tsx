@@ -30,9 +30,11 @@ export function Tile(props: TileProps) {
     <div className="Tile">
       <Icon src={props.icon} />
       <div>
-        {
-          typeof props.title === 'string' ? <p className="Tile-label">{props.title}</p> : props.title
-         }
+        {typeof props.title === 'string' ? (
+          <p className="Tile-label">{props.title}</p>
+        ) : (
+          props.title
+        )}
         <p className="Tile-content">{props.children}</p>
         {props.suffix}
       </div>

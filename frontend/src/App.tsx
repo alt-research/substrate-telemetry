@@ -73,6 +73,7 @@ export default class App extends React.Component {
         blockpropagation: true,
         blocklasttime: false,
         uptime: false,
+        verifier: true,
       },
       (settings) => {
         const selectedColumns = this.selectedColumns(settings);
@@ -169,7 +170,12 @@ export default class App extends React.Component {
     return (
       <div className="App">
         <OfflineIndicator status={status} />
-        <Header chains={chains} connection={this.connection} subscribed={subscribed} subscribedData={subscribedData} />
+        <Header
+          chains={chains}
+          connection={this.connection}
+          subscribed={subscribed}
+          subscribedData={subscribedData}
+        />
         <Chain
           appState={this.appState}
           appUpdate={this.appUpdate}

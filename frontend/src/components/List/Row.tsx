@@ -21,12 +21,9 @@ import { PersistentSet } from '../../persist';
 import {
   Column,
   NameColumn,
-  ValidatorColumn,
   LocationColumn,
   ImplementationColumn,
-  NetworkIdColumn,
   PeersColumn,
-  TxsColumn,
   UploadColumn,
   DownloadColumn,
   StateCacheColumn,
@@ -38,6 +35,7 @@ import {
   BlockPropagationColumn,
   LastBlockColumn,
   UptimeColumn,
+  VerifierAccountColumn,
 } from './';
 
 import './Row.css';
@@ -55,6 +53,7 @@ interface RowState {
 export class Row extends React.Component<RowProps, RowState> {
   public static readonly columns: Column[] = [
     NameColumn,
+    VerifierAccountColumn,
     LocationColumn,
     ImplementationColumn,
     PeersColumn,

@@ -15,10 +15,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import * as React from 'react';
-import { Types, Maybe } from '../../common';
-import { formatNumber, secondsWithPrecision } from '../../utils';
+import { Types } from '../../common';
+import { formatNumber } from '../../utils';
 import { ChainDisplay } from './';
-import { Tile, Ago } from '../';
+import { Tile } from '../';
 
 import l2FinalIcon from '../../icons/l2-final.svg';
 import submittedDigestIcon from '../../icons/l1-submitted-digest.svg';
@@ -46,14 +46,14 @@ const Labeled = styled('div')`
 `;
 
 interface HeaderProps {
-  l2FinalizedBlockNumber: Types.BlockNumber,
-  l2FinalizedBlockHash: Types.BlockHash,
-  submittedDigestHash: Types.DigestHash,
-  submittedBlockHash: Types.BlockHash,
-  challengedBlockHash: Types.BlockHash,
-  challengedDigestHash: Types.DigestHash,
-  submittedPeriod: Types.AppPeriod,
-  challengedPeriod: Types.AppPeriod,
+  l2FinalizedBlockNumber: Types.BlockNumber;
+  l2FinalizedBlockHash: Types.BlockHash;
+  submittedDigestHash: Types.DigestHash;
+  submittedBlockHash: Types.BlockHash;
+  challengedBlockHash: Types.BlockHash;
+  challengedDigestHash: Types.DigestHash;
+  submittedPeriod: Types.AppPeriod;
+  challengedPeriod: Types.AppPeriod;
   currentTab: ChainDisplay;
 }
 
@@ -86,25 +86,56 @@ export class Header extends React.Component<HeaderProps> {
 
     return (
       <div className="Header">
-        <Tile icon={l2FinalIcon} title="L2 finalize block & hash" suffix={<p style={{
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
-          fontSize: '14px'
-        }}>{l2FinalizedBlockHash}</p>}>
+        <Tile
+          icon={l2FinalIcon}
+          title="L2 finalize block & hash"
+          suffix={
+            <p
+              style={{
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+                fontSize: '14px',
+              }}
+            >
+              {l2FinalizedBlockHash}
+            </p>
+          }
+        >
           #{formatNumber(l2FinalizedBlockNumber)}
         </Tile>
         <div className="divider" />
-        <Tile icon={submittedDigestIcon} title="L1 submitted digest" suffix={<Labeled><span className="title">Block hash</span>{submittedBlockHash}</Labeled>}>
+        <Tile
+          icon={submittedDigestIcon}
+          title="L1 submitted digest"
+          suffix={
+            <Labeled>
+              <span className="title">Block hash</span>
+              {submittedBlockHash}
+            </Labeled>
+          }
+        >
           {submittedDigestHash || '0x'}
         </Tile>
-        <Tile icon={chanllengedDigestIcon} title="L1 challenged digest" suffix={<Labeled><span className="title">Block hash</span>{challengedBlockHash}</Labeled>}>
+        <Tile
+          icon={chanllengedDigestIcon}
+          title="L1 challenged digest"
+          suffix={
+            <Labeled>
+              <span className="title">Block hash</span>
+              {challengedBlockHash}
+            </Labeled>
+          }
+        >
           {challengedDigestHash || '0x'}
         </Tile>
         <Tile icon={submissionAppPeriodIcon} title="L1 submission AppPeriod">
           {formatNumber(submittedPeriod)}
         </Tile>
-        <Tile icon={finishedChallengeAppPeriodIcon} title="L1 last finished challenge AppPeriod">
+        <Tile
+          icon={finishedChallengeAppPeriodIcon}
+          title="L1 last finished challenge AppPeriod"
+        >
           {formatNumber(challengedPeriod)}
         </Tile>
       </div>

@@ -52,7 +52,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 }
 
 .Chains-all-chains {
-
 }
 
 .Chains-fork-me {
@@ -111,7 +110,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 .Chains-chain.Chains-chain-selected {
   color: white;
   font-weight: bold;
-  background-color: #6667AB;
+  background-color: #6667ab;
   border-radius: 20px;
   /*
   Instead of making the font bold, which changes the container width and

@@ -15,10 +15,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use crate::find_location;
-use common::node_message::SystemInterval;
+use common::node_message::{SystemInterval, VerifierNodeDetails};
 use common::node_types::{
     AppPeriod, Block, BlockDetails, NodeDetails, NodeHardware, NodeHwBench, NodeIO, NodeLocation,
-    NodeStats, Timestamp, VerifierBlockInfos, VerifierNodeDetails, VerifierStats,
+    NodeStats, Timestamp, VerifierBlockInfos, VerifierNodeDetails as VerifierNodeDetailsState,
+    VerifierStats,
 };
 use common::time;
 
@@ -51,7 +52,7 @@ pub struct Node {
     /// Hardware benchmark results for the node
     hwbench: Option<NodeHwBench>,
     /// The Static datas for verifier.
-    verifier_details: Option<VerifierNodeDetails>,
+    verifier_details: Option<VerifierNodeDetailsState>,
     /// The State datas for verifier.
     verifier_stats: VerifierStats,
 }
@@ -244,12 +245,20 @@ impl Node {
         self.startup_time
     }
 
-    pub fn verifier_details(&self) -> Option<&VerifierNodeDetails> {
+    pub fn verifier_details(&self) -> Option<&VerifierNodeDetailsState> {
         self.verifier_details.as_ref()
     }
 
-    pub fn update_verifier_details(&mut self, details: VerifierNodeDetails) -> bool {
+    pub fn update_verifier_details(&mut self, details: &VerifierNodeDetails) -> bool {
         if self.verifier_details.is_none() {
+            let details = VerifierNodeDetailsState {
+                layer1_genesis_hash: details.layer1_genesis_hash,
+                layer2_genesis_hash: details.layer2_genesis_hash,
+                layer2_app_id: details.layer2_app_id,
+                verifier: details.verifier.clone(),
+                name: details.name.clone(),
+            };
+
             self.verifier_details = Some(details);
             true
         } else {

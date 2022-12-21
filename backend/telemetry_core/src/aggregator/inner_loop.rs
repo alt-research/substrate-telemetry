@@ -555,6 +555,13 @@ impl InnerLoop {
                             if node.stale() {
                                 feed_serializer.push(feed_message::StaleNode(node_id));
                             }
+
+                            if let Some(verifier_details) = node.verifier_details() {
+                                feed_serializer.push(feed_message::VerifierNodeDetailsStats(
+                                    node_id,
+                                    verifier_details,
+                                ));
+                            }
                         }
                         feed_serializer.into_finalized()
                     })

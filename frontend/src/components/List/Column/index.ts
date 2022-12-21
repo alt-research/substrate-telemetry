@@ -33,3 +33,6 @@ export * from './BlockTimeColumn';
 export * from './BlockPropagationColumn';
 export * from './LastBlockColumn';
 export * from './UptimeColumn';
+
+// for verifier
+export * from './VerifierAccountColumn';

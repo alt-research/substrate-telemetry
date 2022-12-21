@@ -25,11 +25,7 @@ interface TileProps {
 }
 
 function Tabs(props: TileProps) {
-  return (
-    <div className={props.className}>
-
-    </div>
-  );
+  return <div className={props.className}></div>;
 }
 
 export default Tabs;

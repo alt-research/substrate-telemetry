@@ -127,6 +127,8 @@ pub struct VerifierNodeDetails {
     pub layer2_app_id: u32,
     /// The verifier public key.
     pub verifier: Box<str>,
+    /// The name of the verifier node.
+    pub name: Box<str>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

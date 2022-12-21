@@ -96,7 +96,7 @@ pub struct NodeHwBench {
 }
 
 /// The Details info for a alt-verifier node.
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct VerifierNodeDetails {
     /// The layer1 chain 's genesis.
     pub layer1_genesis_hash: BlockHash,
@@ -106,6 +106,8 @@ pub struct VerifierNodeDetails {
     pub layer2_app_id: u32,
     /// The verifier public key.
     pub verifier: Box<str>,
+    /// The name of the verifier node.
+    pub name: Box<str>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
