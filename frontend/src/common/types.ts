@@ -125,9 +125,9 @@ export type ChainStats = {
 };
 
 export type VerifierNodeDetailInfos = {
-  layer1_genesis_hash: GenesisHash;
+  beacon_genesis_hash: GenesisHash;
   layer2_genesis_hash: GenesisHash;
-  layer2_app_id: AppId;
+  layer2_rollup_id: AppId;
   verifier: VerifierAccountId;
   name: NodeName;
 };

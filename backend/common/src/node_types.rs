@@ -99,11 +99,11 @@ pub struct NodeHwBench {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct VerifierNodeDetails {
     /// The layer1 chain 's genesis.
-    pub layer1_genesis_hash: BlockHash,
+    pub beacon_genesis_hash: BlockHash,
     /// The layer2(producer) chain 's genesis.
     pub layer2_genesis_hash: BlockHash,
     /// The app id of the layer2 in layer1.
-    pub layer2_app_id: u32,
+    pub layer2_rollup_id: u32,
     /// The verifier public key.
     pub verifier: Box<str>,
     /// The name of the verifier node.

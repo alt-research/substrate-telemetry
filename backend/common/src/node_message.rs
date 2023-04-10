@@ -120,11 +120,11 @@ pub struct NodeHwBench {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct VerifierNodeDetails {
     /// The layer1 chain 's genesis.
-    pub layer1_genesis_hash: BlockHash,
+    pub beacon_genesis_hash: BlockHash,
     /// The layer2(producer) chain 's genesis.
     pub layer2_genesis_hash: BlockHash,
     /// The app id of the layer2 in layer1.
-    pub layer2_app_id: u32,
+    pub layer2_rollup_id: u32,
     /// The verifier public key.
     pub verifier: Box<str>,
     /// The name of the verifier node.
@@ -141,10 +141,10 @@ pub struct VerifierProcessFinalityBlock {
 /// The Details info for a alt-verifier node.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct VerifierDetailsStats {
-    pub submitted_digest: Option<DigestHash>,
+    pub submitted_commit: Option<DigestHash>,
     pub submitted_block_number: Option<u64>,
     pub submitted_block_hash: Option<BlockHash>,
-    pub challenged_digest: Option<DigestHash>,
+    pub challenged_commit: Option<DigestHash>,
     pub challenged_block_number: Option<u64>,
     pub challenged_block_hash: Option<BlockHash>,
 }

@@ -252,9 +252,9 @@ impl Node {
     pub fn update_verifier_details(&mut self, details: &VerifierNodeDetails) -> bool {
         if self.verifier_details.is_none() {
             let details = VerifierNodeDetailsState {
-                layer1_genesis_hash: details.layer1_genesis_hash,
+                beacon_genesis_hash: details.beacon_genesis_hash,
                 layer2_genesis_hash: details.layer2_genesis_hash,
-                layer2_app_id: details.layer2_app_id,
+                layer2_rollup_id: details.layer2_rollup_id,
                 verifier: details.verifier.clone(),
                 name: details.name.clone(),
             };

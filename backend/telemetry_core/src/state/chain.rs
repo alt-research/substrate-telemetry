@@ -260,16 +260,16 @@ impl Chain {
                 }
                 Payload::VerifierDetailsStats(ref details) => {
                     if let (
-                        Some(submitted_digest),
+                        Some(submitted_commit),
                         Some(submitted_block_number),
                         Some(submitted_block_hash),
                     ) = (
-                        details.submitted_digest,
+                        details.submitted_commit,
                         details.submitted_block_number,
                         details.submitted_block_hash,
                     ) {
                         let info = VerifierBlockInfos {
-                            digest: submitted_digest,
+                            digest: submitted_commit,
                             block_number: submitted_block_number,
                             block_hash: submitted_block_hash,
                         };
@@ -287,16 +287,16 @@ impl Chain {
                     }
 
                     if let (
-                        Some(challenged_digest),
+                        Some(challenged_commit),
                         Some(challenged_block_number),
                         Some(challenged_block_hash),
                     ) = (
-                        details.challenged_digest,
+                        details.challenged_commit,
                         details.challenged_block_number,
                         details.challenged_block_hash,
                     ) {
                         let info = VerifierBlockInfos {
-                            digest: challenged_digest,
+                            digest: challenged_commit,
                             block_number: challenged_block_number,
                             block_hash: challenged_block_hash,
                         };

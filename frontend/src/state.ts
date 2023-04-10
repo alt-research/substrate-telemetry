@@ -86,9 +86,9 @@ export class Node {
   public finalizedHash = '' as Types.BlockHash;
 
   // datas for verifier
-  public layer1_genesis_hash: Types.GenesisHash;
+  public beacon_genesis_hash: Types.GenesisHash;
   public layer2_genesis_hash: Types.GenesisHash;
-  public layer2_app_id: Types.AppId;
+  public layer2_rollup_id: Types.AppId;
   public verifier_account: Types.VerifierAccountId;
 
   public lat: Maybe<Types.Latitude>;
@@ -195,8 +195,8 @@ export class Node {
 
   public updateVerifierNodeDetails(details: Types.VerifierNodeDetailInfos) {
     console.log('update details: ', details);
-    this.layer2_app_id = details.layer2_app_id;
-    this.layer1_genesis_hash = details.layer1_genesis_hash;
+    this.layer2_rollup_id = details.layer2_rollup_id;
+    this.beacon_genesis_hash = details.beacon_genesis_hash;
     this.layer2_genesis_hash = details.layer2_genesis_hash;
     this.verifier_account = details.verifier;
     this.name = details.name;
