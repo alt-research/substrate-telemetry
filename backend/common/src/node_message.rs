@@ -27,6 +27,8 @@ use serde::{Deserialize, Serialize};
 pub enum ChainType {
     /// The chain is layer1.
     Layer1,
+    /// The chain is rollup with app_id.
+    Rollup(u32),
     /// The chain is layer2 with app_id.
     Layer2(u32),
 }
@@ -86,6 +88,8 @@ pub struct SystemConnected {
 pub struct SystemInterval {
     pub chain_type: Option<ChainType>,
     pub peers: Option<u64>,
+    pub height: Option<BlockNumber>,
+    pub best: Option<BlockHash>,
     pub txcount: Option<u64>,
     pub bandwidth_upload: Option<f64>,
     pub bandwidth_download: Option<f64>,

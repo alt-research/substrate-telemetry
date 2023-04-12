@@ -139,22 +139,32 @@ pub struct SystemInterval {
     pub bandwidth_download: Option<f64>,
     pub finalized_height: Option<BlockNumber>,
     pub finalized_hash: Option<Hash>,
-    #[serde(flatten)]
-    pub block: Option<Block>,
+    pub best: Option<Hash>,
+    pub height: Option<BlockNumber>,
     pub used_state_cache_size: Option<f32>,
 }
 
 impl From<SystemInterval> for internal::SystemInterval {
     fn from(msg: SystemInterval) -> Self {
+        let block = match (msg.best, msg.height) {
+            (Some(hash), Some(height)) => Some(node_types::Block {
+                hash: hash.into(),
+                height,
+            }),
+            _ => None,
+        };
+
         internal::SystemInterval {
             chain_type: msg.chain_type,
             peers: msg.peers,
             txcount: msg.txcount,
+            best: msg.best.map(|h| h.into()),
+            height: msg.height,
             bandwidth_upload: msg.bandwidth_upload,
             bandwidth_download: msg.bandwidth_download,
             finalized_height: msg.finalized_height,
             finalized_hash: msg.finalized_hash.map(|h| h.into()),
-            block: msg.block.map(|b| b.into()),
+            block,
             used_state_cache_size: msg.used_state_cache_size,
         }
     }

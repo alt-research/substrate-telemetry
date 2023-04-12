@@ -17,6 +17,7 @@
 use num_traits::{Float, Zero};
 use std::ops::AddAssign;
 
+#[derive(Debug)]
 pub struct MeanList<T>
 where
     T: Float + AddAssign + Zero + From<u8>,

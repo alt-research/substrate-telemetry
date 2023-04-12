@@ -215,6 +215,14 @@ impl Chain {
                                 feed.push(feed_message::Layer2NodeIOUpdate(nid.into(), io));
                             }
                         }
+                        Some(ChainType::Rollup(_)) => {
+                            if let Some(stats) = node.update_stats(interval) {
+                                feed.push(feed_message::Layer2NodeStatsUpdate(nid.into(), stats));
+                            }
+                            if let Some(io) = node.update_io(interval) {
+                                feed.push(feed_message::Layer2NodeIOUpdate(nid.into(), io));
+                            }
+                        }
                         None => {
                             if let Some(stats) = node.update_stats(interval) {
                                 feed.push(feed_message::NodeStatsUpdate(nid.into(), stats));
@@ -360,6 +368,13 @@ impl Chain {
                                 finalized.hash,
                             ));
                         }
+                        Some(ChainType::Rollup(_)) => {
+                            feed.push(feed_message::Layer2FinalizedBlock(
+                                nid.into(),
+                                finalized.height,
+                                finalized.hash,
+                            ));
+                        }
                         None => {
                             feed.push(feed_message::FinalizedBlock(
                                 nid.into(),
@@ -376,6 +391,9 @@ impl Chain {
                                 // TODO useless
                             }
                             Some(ChainType::Layer2(_)) => {
+                                // TODO useless
+                            }
+                            Some(ChainType::Rollup(_)) => {
                                 // TODO useless
                             }
                             None => {

@@ -28,6 +28,7 @@ const THROTTLE_THRESHOLD: u64 = 100;
 /// Minimum time of intervals for block updates sent to the browser when throttled, in ms.
 const THROTTLE_INTERVAL: u64 = 1000;
 
+#[derive(Debug)]
 pub struct Node {
     /// Static details
     details: NodeDetails,
