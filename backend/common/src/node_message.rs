@@ -76,6 +76,9 @@ pub enum Payload {
     VerifierProcessFinalityBlock(VerifierProcessFinalityBlock),
     VerifierDetailsStats(VerifierDetailsStats),
     VerifierPeriodStats(VerifierPeriodStats),
+    RollupNodeDetails(RollupNodeDetails),
+    RollupChallengeStats(RollupChallengeStats),
+    RollupDetailsStats(RollupDetailsStats),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -158,6 +161,47 @@ pub struct VerifierDetailsStats {
 pub struct VerifierPeriodStats {
     pub submission: Option<AppPeriod>,
     pub challenge: Option<AppPeriod>,
+}
+
+/// The Details info for a alt-verifier node 's rollup mode.
+#[derive(Default, Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
+pub struct RollupNodeDetails {
+    /// The layer1 chain 's chain id.
+    pub layer1_chain_id: u64,
+    /// The layer2(producer) chain 's genesis.
+    pub layer2_genesis_hash: BlockHash,
+    /// The committer public key.
+    pub committer: Box<str>,
+    /// The name of the verifier node.
+    pub name: Box<str>,
+}
+
+/// The Details info for a alt-verifier node 's rollup mode.
+#[derive(Default, Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
+pub struct RollupChallengeStats {
+    /// Challenge id
+    pub id: Option<u64>,
+    /// Left bound of the binary search: challenger & defender agree on all steps <= L.
+    pub l: Option<u64>,
+    /// Right bound of the binary search: challenger & defender disagree on all steps >= R.
+    pub r: Option<u64>,
+    /// Block number preceding the challenged block.
+    pub block_number: Option<u64>,
+    /// the challenger address.
+    pub challenger: Option<Box<str>>,
+    /// the defender address.
+    pub defender: Option<Box<str>>,
+    pub status: Option<Box<str>>,
+    pub is_defender_turn: Option<bool>,
+}
+
+/// The Rollup Details info for a alt-verifier node 's rollup mode.
+#[derive(Default, Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
+pub struct RollupDetailsStats {
+    pub submitter: Box<str>,
+    pub checkpoint: u64,
+    pub commit_hash: BlockHash,
+    pub l1_block_number: u64,
 }
 
 impl Payload {

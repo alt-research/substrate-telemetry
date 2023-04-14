@@ -348,6 +348,32 @@ impl Chain {
                         }
                     }
                 }
+                Payload::RollupChallengeStats(ref challenge) => {
+                    if challenge.id.is_some() {
+                        if node.update_rollup_challenge_stats(challenge) {
+                            feed.push(feed_message::RollupChallengeStats(
+                                nid.into(),
+                                node.get_rollup_challenge_state(),
+                            ));
+                        }
+                    }
+                }
+                Payload::RollupDetailsStats(ref commit) => {
+                    if node.update_rollup_commit_stats(commit) {
+                        feed.push(feed_message::RollupCommitStats(
+                            nid.into(),
+                            node.get_rollup_commit_stats(),
+                        ));
+                    }
+                }
+                Payload::RollupNodeDetails(ref node_details) => {
+                    if node.update_rollup_details(node_details) {
+                        feed.push(feed_message::RollupNodeDetailsStats(
+                            nid.into(),
+                            node.get_rollup_details(),
+                        ));
+                    }
+                }
                 _ => {}
             }
 

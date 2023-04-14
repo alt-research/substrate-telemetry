@@ -21,8 +21,8 @@
 //! structures (for example, to support bincode better).
 use super::hash::Hash;
 use super::{
-    ChainType, VerifierDetailsStats, VerifierNodeDetails, VerifierPeriodStats,
-    VerifierProcessFinalityBlock,
+    ChainType, RollupChallengeStats, RollupDetailsStats, RollupNodeDetails, VerifierDetailsStats,
+    VerifierNodeDetails, VerifierPeriodStats, VerifierProcessFinalityBlock,
 };
 use common::node_message as internal;
 use common::node_types;
@@ -91,6 +91,12 @@ pub enum Payload {
     VerifierDetailsStats(VerifierDetailsStats),
     #[serde(rename = "verifier.period")]
     VerifierPeriodStats(VerifierPeriodStats),
+    #[serde(rename = "rollup.node_details")]
+    RollupNodeDetails(RollupNodeDetails),
+    #[serde(rename = "rollup.details")]
+    RollupDetailsStats(RollupDetailsStats),
+    #[serde(rename = "rollup.challenge_details")]
+    RollupChallengeStats(RollupChallengeStats),
 }
 
 impl From<Payload> for internal::Payload {
@@ -108,6 +114,9 @@ impl From<Payload> for internal::Payload {
             }
             Payload::VerifierDetailsStats(m) => internal::Payload::VerifierDetailsStats(m.into()),
             Payload::VerifierPeriodStats(m) => internal::Payload::VerifierPeriodStats(m.into()),
+            Payload::RollupNodeDetails(m) => internal::Payload::RollupNodeDetails(m.into()),
+            Payload::RollupDetailsStats(m) => internal::Payload::RollupDetailsStats(m.into()),
+            Payload::RollupChallengeStats(m) => internal::Payload::RollupChallengeStats(m.into()),
         }
     }
 }

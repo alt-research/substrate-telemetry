@@ -88,3 +88,81 @@ impl From<VerifierPeriodStats> for internal::VerifierPeriodStats {
         }
     }
 }
+
+/// The Details info for a alt-verifier node.
+#[derive(Deserialize, Debug, Clone)]
+pub struct RollupNodeDetails {
+    /// The layer1 chain 's chain id.
+    pub layer1_chain_id: u64,
+    /// The layer2(producer) chain 's genesis.
+    pub layer2_genesis_hash: Hash,
+    /// The committer public key.
+    pub committer: Box<str>,
+    /// The name of the verifier node.
+    pub name: Box<str>,
+}
+
+impl From<RollupNodeDetails> for internal::RollupNodeDetails {
+    fn from(msg: RollupNodeDetails) -> Self {
+        internal::RollupNodeDetails {
+            layer1_chain_id: msg.layer1_chain_id,
+            layer2_genesis_hash: msg.layer2_genesis_hash.into(),
+            committer: msg.committer,
+            name: msg.name,
+        }
+    }
+}
+
+/// The Details commit info for a alt-verifier node.
+#[derive(Deserialize, Debug, Clone)]
+pub struct RollupChallengeStats {
+    /// Challenge id
+    pub id: Option<u64>,
+    /// Left bound of the binary search: challenger & defender agree on all steps <= L.
+    pub l: Option<u64>,
+    /// Right bound of the binary search: challenger & defender disagree on all steps >= R.
+    pub r: Option<u64>,
+    /// Block number preceding the challenged block.
+    pub block_number: Option<u64>,
+    /// the challenger address.
+    pub challenger: Option<Box<str>>,
+    /// the defender address.
+    pub defender: Option<Box<str>>,
+    pub status: Option<Box<str>>,
+    pub is_defender_turn: Option<bool>,
+}
+
+impl From<RollupChallengeStats> for internal::RollupChallengeStats {
+    fn from(msg: RollupChallengeStats) -> Self {
+        internal::RollupChallengeStats {
+            id: msg.id,
+            l: msg.l,
+            r: msg.r,
+            block_number: msg.block_number,
+            challenger: msg.challenger,
+            defender: msg.defender,
+            status: msg.status,
+            is_defender_turn: msg.is_defender_turn,
+        }
+    }
+}
+
+/// The Details info for a alt-verifier node.
+#[derive(Deserialize, Debug, Clone)]
+pub struct RollupDetailsStats {
+    pub submitter: Box<str>,
+    pub checkpoint: u64,
+    pub commit_hash: Hash,
+    pub l1_block_number: u64,
+}
+
+impl From<RollupDetailsStats> for internal::RollupDetailsStats {
+    fn from(msg: RollupDetailsStats) -> Self {
+        internal::RollupDetailsStats {
+            submitter: msg.submitter,
+            checkpoint: msg.checkpoint.into(),
+            commit_hash: msg.commit_hash.into(),
+            l1_block_number: msg.l1_block_number.into(),
+        }
+    }
+}

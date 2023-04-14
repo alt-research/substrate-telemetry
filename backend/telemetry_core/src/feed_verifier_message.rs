@@ -3,8 +3,8 @@
 
 use crate::feed_message::*;
 use common::node_types::{
-    AppPeriod, BlockDetails, BlockHash, BlockNumber, NodeIO, NodeStats, VerifierBlockInfos,
-    VerifierNodeDetails,
+    AppPeriod, BlockDetails, BlockHash, BlockNumber, NodeIO, NodeStats,
+    VerifierBlockInfos, VerifierNodeDetails,
 };
 use serde::{Deserialize, Serialize};
 
@@ -61,3 +61,18 @@ pub struct VerifierNodeChallengePeriodStats(pub FeedNodeId, pub AppPeriod);
 
 #[derive(Serialize)]
 pub struct VerifierNodeDetailsStats<'a>(pub FeedNodeId, pub &'a VerifierNodeDetails);
+
+#[derive(Serialize)]
+pub struct RollupChallengeStats<'a>(
+    pub FeedNodeId,
+    pub &'a common::node_message::RollupChallengeStats,
+);
+
+#[derive(Serialize)]
+pub struct RollupCommitStats<'a>(
+    pub FeedNodeId,
+    pub &'a common::node_message::RollupDetailsStats,
+);
+
+#[derive(Serialize)]
+pub struct RollupNodeDetailsStats<'a>(pub FeedNodeId, pub &'a common::node_message::RollupNodeDetails);

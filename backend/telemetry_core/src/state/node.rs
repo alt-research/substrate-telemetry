@@ -15,11 +15,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use crate::find_location;
-use common::node_message::{SystemInterval, VerifierNodeDetails};
+use common::node_message::{
+    RollupChallengeStats, RollupDetailsStats, SystemInterval, VerifierNodeDetails,RollupNodeDetails,
+};
 use common::node_types::{
     AppPeriod, Block, BlockDetails, NodeDetails, NodeHardware, NodeHwBench, NodeIO, NodeLocation,
-    NodeStats, Timestamp, VerifierBlockInfos, VerifierNodeDetails as VerifierNodeDetailsState,
-    VerifierStats,
+    NodeStats, Timestamp, VerifierBlockInfos,
+    VerifierNodeDetails as VerifierNodeDetailsState, VerifierStats,
 };
 use common::time;
 
@@ -56,6 +58,12 @@ pub struct Node {
     verifier_details: Option<VerifierNodeDetailsState>,
     /// The State datas for verifier.
     verifier_stats: VerifierStats,
+    /// The Static datas for rollup.
+    rollup_details: RollupNodeDetails,
+    /// The State datas for rollup.
+    rollup_commit_stats: RollupDetailsStats,
+    /// The State datas for rollup.
+    rollup_challenge_stats: RollupChallengeStats,
 }
 
 impl Node {
@@ -79,6 +87,9 @@ impl Node {
             hwbench: None,
             verifier_details: None,
             verifier_stats: VerifierStats::default(),
+            rollup_details: RollupNodeDetails::default(),
+            rollup_commit_stats: RollupDetailsStats::default(),
+            rollup_challenge_stats: RollupChallengeStats::default(),
         }
     }
 
@@ -317,5 +328,47 @@ impl Node {
         } else {
             false
         }
+    }
+
+    /// update the rollup node details, if challenged return true
+    pub fn update_rollup_details(&mut self, details: &RollupNodeDetails) -> bool {
+        if &self.rollup_details != details {
+            self.rollup_details = details.clone();
+            true
+        } else {
+            false
+        }
+    }
+
+    /// update the lastest rollup committed datas,
+    pub fn update_rollup_commit_stats(&mut self, commit: &RollupDetailsStats) -> bool {
+        if self.rollup_commit_stats.checkpoint <= commit.checkpoint {
+            self.rollup_commit_stats = commit.clone();
+            true
+        } else {
+            false
+        }
+    }
+
+    /// update the rollup challenge datas,
+    pub fn update_rollup_challenge_stats(&mut self, challenge: &RollupChallengeStats) -> bool {
+        if &self.rollup_challenge_stats != challenge {
+            self.rollup_challenge_stats = challenge.clone();
+            true
+        } else {
+            false
+        }
+    }
+
+    pub fn get_rollup_challenge_state(&self) -> &RollupChallengeStats {
+        &self.rollup_challenge_stats
+    }
+
+    pub fn get_rollup_commit_stats(&self) -> &RollupDetailsStats {
+        &self.rollup_commit_stats
+    }
+
+    pub fn get_rollup_details(&self) -> &RollupNodeDetails {
+        &self.rollup_details
     }
 }

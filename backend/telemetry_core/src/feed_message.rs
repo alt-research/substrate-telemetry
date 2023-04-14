@@ -143,6 +143,9 @@ actions! {
     83: VerifierNodeSubmissionPeriodStats,
     84: VerifierNodeChallengePeriodStats,
     85: VerifierNodeDetailsStats<'_>,
+    91: RollupNodeDetailsStats<'_>,
+    92: RollupChallengeStats<'_>,
+    93: RollupCommitStats<'_>,
 }
 
 #[derive(Serialize)]
